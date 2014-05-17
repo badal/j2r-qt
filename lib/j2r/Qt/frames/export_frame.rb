@@ -16,6 +16,11 @@ module JacintheReports
         self.frame_shadow = Qt::Frame::Raised
         @recipe = recipe
         @parametrizer = ParametrizerFrame.new(@recipe)
+        build_layout
+        connect_frames
+      end
+
+      def build_layout
         @layout.add_layout(@parametrizer)
         @layout.add_widget(HLine.new)
         horizontal = Qt::HBoxLayout.new
@@ -27,7 +32,9 @@ module JacintheReports
         @mailing_frame = MailingFrame.new(@parametrizer)
         horizontal.add_widget(@mailing_frame)
         @layout.addStretch
+      end
 
+      def connect_frames
         [@report_frame, @cross_frame, @mailing_frame].each do |frame|
           console_connect(frame)
           show_connect(frame)

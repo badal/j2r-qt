@@ -31,6 +31,10 @@ module JacintheReports
         horizontal.add_widget(@mailing_frame)
         horizontal.addStretch
         layout.addStretch
+        connect_signals
+      end
+
+      def connect_signals
         show_connect(@audit_frame)
         console_connect(@audit_frame)
         show_connect(@mailing_frame)

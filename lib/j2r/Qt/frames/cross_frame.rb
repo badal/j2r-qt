@@ -17,6 +17,11 @@ module JacintheReports
         super('Tableau croisé')
         set_color(YELLOW)
         @recipe = recipe
+        build_layout
+        connect_signals
+      end
+
+      def build_layout
         @layout.add_widget(Qt::Label.new('Lignes'))
         @lines = FieldCombo.new(@recipe)
         @layout.add_widget(@lines)
@@ -31,7 +36,6 @@ module JacintheReports
         @layout.insertSpacing(5, 45)
         @layout.insertSpacing(7, 15)
         @layout.addStretch
-        connect_signals
       end
 
       def connect_signals

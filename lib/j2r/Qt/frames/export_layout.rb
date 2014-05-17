@@ -24,6 +24,22 @@ module JacintheReports
         @format.addItems(FORMATS)
         @format.enabled = true
         add_widget(@format)
+        build_buttons
+        addStretch
+      end
+
+      def layout_direction(direction)
+        case direction
+        when :horizontal
+          Qt::BoxLayout::LeftToRight
+        when :vertical
+          Qt::BoxLayout::TopToBottom
+        else
+          nil
+        end
+      end
+
+      def build_buttons
         buttons = Qt::HBoxLayout.new
         addLayout(buttons)
         connect(@format, SIGNAL_ACTIVATED, self, SLOT(:format_changed))
@@ -35,18 +51,6 @@ module JacintheReports
         connect_button(@show_button, :open_report)
         buttons.add_widget(@show_button)
         @show_button.enabled = false
-        addStretch
-      end
-
-      def layout_direction(direction)
-        case direction
-          when :horizontal
-            Qt::BoxLayout::LeftToRight
-          when :vertical
-            Qt::BoxLayout::TopToBottom
-          else
-            nil
-        end
       end
 
       def load_report(report)
