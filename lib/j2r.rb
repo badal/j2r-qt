@@ -8,6 +8,7 @@
 
 require_relative 'version.rb'
 
+# GUIs for Jacinthe
 module JacintheReports
   # data directory
   DATA = File.expand_path('../data', File.dirname(__FILE__))
