@@ -1,13 +1,14 @@
 # JacintheReports
+[![Code Climate](https://codeclimate.com/github/badal/jacman-qt.png)](https://codeclimate.com/github/badal/jacman-qt)
 
 ## Description
-   **JacintheReports** is a utility library to produce reports from the Jacinthe-DB database
+   **JacintheReports** is a utility library to produce reports from the Jacinthe-DB database.
 
 ## Version
    Jacinthe rouge, v2.3
 
 ## Dependencies
-  * checked on ruby 1.9.3 (on Windows and OSX)
+  * checked on ruby 1.9.3 (on Windows and OSX) and on ruby 2.0.0 (on Centos)
   * gem mysql2
   * gem sequel (3. or 4.)
   * gem qtbindings (for GUI)
@@ -48,7 +49,9 @@
   * If using a 64bits Mysql client, you may have compile the mysql gems with a special connector (see the web)
 
 ## Source and issues
-   * Source code on private repository [Bitbucket](https://bitbucket.org/mdemazure/j2r)
+   [![Code Climate](https://codeclimate.com/github/badal/j2r-qt.png)](https://codeclimate.com/github/badal/jacman-qt)
+
+   * Source code on repository [GitHub](https://github.com/badal/j2r-qt)
    * [Issue Tracker](https://bitbucket.org/mdemazure/j2r/issues?status=new&status=openissues/new)
 
 ## Copyright

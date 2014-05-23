@@ -1,15 +1,26 @@
-#!mast -x bin -x metrics -x Jacinthe -x scories -x doc -x help -x coverage -x pkg -x Claire -x sorties -x documentation v1 -x demo bat bin documentation v1 Gemfile Gemfile.lock help HISTORY.md lib LICENSE MANIFEST metrics.rake Rakefile README.md
+#!mast -x bin -x metrics -x Jacinthe -x scories -x doc -x help -x coverage -x pkg -x Claire -x sorties -x documentation v1 -x demo bat bin data doc documentation v1 Gemfile Gemfile.lock help HISTORY.md lib LICENSE MANIFEST metrics metrics.rake Rakefile README.md test TODO.md
 bat/abonnement.yaml
 bat/auditer.bat
 bat/batch_reporter.bat
 bat/essai_reporter.bat
 bat/reporter.bat
 bat/tableau_de_bord.bat
+data/config/connect.ini
+data/config/joins.ini
+data/config/sources.ini
+data/extended/extended_fields.bak
+data/extended/extended_fields.yaml
+data/extended/extended_joins.bak
+data/extended/extended_joins.yaml
+data/extended/toto.txt
+data/structure/fields.bak
+data/structure/fields.yaml
+data/structure/joins.bak
+data/structure/joins.yaml
 Gemfile
 Gemfile.lock
 HISTORY.md
 lib/.rubocop.yml
-lib/__version.rb
 lib/auditer.rb
 lib/j2r/Qt/auditer_main.rb
 lib/j2r/Qt/auditer_qt.rb
@@ -45,8 +56,11 @@ lib/j2r/Qt/reporter_qt.rb
 lib/j2r/Qt/signals.rb
 lib/j2r.rb
 lib/reporter.rb
+lib/version.rb
 LICENSE
 MANIFEST
 metrics.rake
 Rakefile
 README.md
+test/spec_helper.rb
+TODO.md

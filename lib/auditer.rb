@@ -7,7 +7,6 @@
 # (c) Michel Demazure <michel@demazure.com>
 
 require_relative 'j2r.rb'
-require_relative 'j2r/core/audits/tiers_searcher.rb'
 
 J2R.for_user do
   J2R.logger.info('start auditer')
