@@ -10,7 +10,7 @@ require_relative 'j2r.rb'
 
 J2R.for_user do
   J2R.logger.info('start reporter')
-  require_relative('../lib/j2r/Qt/reporter_main.rb')
+  require_relative('j2r/Qt/reporter_main.rb')
   J2R::GuiQt::ReporterMain.run
   J2R.logger.info('stop reporter')
 end

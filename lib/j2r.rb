@@ -11,7 +11,7 @@ require_relative 'version.rb'
 # GUIs for Jacinthe
 module JacintheReports
   # data directory
-  DATA = File.expand_path('../data', File.dirname(__FILE__))
+  DATA = ENV["J2R_DATA"]
 
   # help directory
   HELP_DIR = File.expand_path('../help', File.dirname(__FILE__))
