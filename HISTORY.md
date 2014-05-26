@@ -1,5 +1,11 @@
-##[V3.0.0]
+##[v3.0.1]
+* uses local gems `j2r-jaccess` and `j2r-core`
+
+##[v3.0.0]
 * decomposed in _j2r-jaccess_, _j2r-core_ and _j2r-qt_
+* DATA moved to environment variable
+
+#[v3]
 
 ##[v2.3.1]
 
@@ -138,6 +144,8 @@ Auditer GUi with wild cards
 ## [v1.0.0] Jacinthe rose
 
 * macros visible in designer
+
+# [v1]
 
 ## [v0.18.2]
 

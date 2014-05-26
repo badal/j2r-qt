@@ -10,15 +10,15 @@ require_relative 'version.rb'
 
 # GUIs for Jacinthe
 module JacintheReports
+  # copyright
+  COPYRIGHT = "\u00A9 Michel Demazure & Kenji Lefevre"
+
   # data directory
-  DATA = ENV["J2R_DATA"]
+  DATA = ENV['J2R_DATA']
 
   # help directory
   HELP_DIR = File.expand_path('../help', File.dirname(__FILE__))
 end
 
-# for parallel gem development
-require_relative '../../j2r-core/lib/j2r/core.rb'
-
-# for global version
-# require_relative 'j2r/core.rb'
+require 'j2r/jaccess'
+require 'j2r/core'

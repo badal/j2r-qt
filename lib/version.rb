@@ -13,12 +13,9 @@ module JacintheReports
   # minor version number
   MINOR = 0
   # tiny version number
-  TINY = 'dev'
+  TINY = 1
   # version
   VERSION = [MAJOR, MINOR, TINY].join('.')
-
-  # author
-  COPYRIGHT = "\u00A9 Michel Demazure 2011-2014"
 
   # name of this version
   NAME = "Jacinthe violette #{VERSION}"

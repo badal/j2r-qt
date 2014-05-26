@@ -5,6 +5,8 @@ group :exploitation do
   gem "sequel"
   gem "prawn"
   gem "qtbindings"
+  gem 'j2r-core'
+  gem 'j2r-jaccess'
 end
 
 group :development do

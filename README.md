@@ -5,7 +5,7 @@
    **JacintheReports** is a utility library to produce reports from the Jacinthe-DB database.
 
 ## Version
-   Jacinthe rouge, v2.3
+   Jacinthe rouge, v2.3, being converted to 3.0
 
 ## Dependencies
   * checked on ruby 1.9.3 (on Windows and OSX) and on ruby 2.0.0 (on Centos)
