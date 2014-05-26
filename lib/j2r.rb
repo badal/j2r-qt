@@ -13,9 +13,6 @@ module JacintheReports
   # copyright
   COPYRIGHT = "\u00A9 Michel Demazure & Kenji Lefevre"
 
-  # data directory
-  DATA = ENV['J2R_DATA']
-
   # help directory
   HELP_DIR = File.expand_path('../help', File.dirname(__FILE__))
 end
