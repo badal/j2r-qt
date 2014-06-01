@@ -54,11 +54,10 @@ module JacintheReports
 
       def build_with(field = FieldCombo::FIRSTLINE, index = 0)
         ret = @fields.build_with(field)
-        if ret
-          @entry.enabled = true
-          @entry.addItems(ITEMS)
-          @entry.current_index = index
-        end
+        return unless ret
+        @entry.enabled = true
+        @entry.addItems(ITEMS)
+        @entry.current_index = index
       end
 
       def build_values

@@ -10,7 +10,7 @@ module JacintheReports
   module GuiQt
     # line for sort panel
     class SortLine < ModelDataLine
-      ITEMS =  %w(Aucun direct inverse)
+      ITEMS = %w(Aucun direct inverse)
 
       include Signals
       slots :field_changed, :sort_changed
@@ -91,10 +91,9 @@ module JacintheReports
           sorts[field.to_sym] = direction == 1
         end
         @recipe.sorts = sorts
-        if @lines.size == sorts.size
-          add_line
-          build_panel
-        end
+        return unless @lines.size == sorts.size
+        add_line
+        build_panel
       end
     end
   end

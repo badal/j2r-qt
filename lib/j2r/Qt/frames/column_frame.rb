@@ -92,10 +92,9 @@ module JacintheReports
           next if field == FieldCombo::FIRSTLINE || name.empty?
           cols[field.to_sym] = name
         end
-        if @lines.size == cols.size
-          add_line
-          build_panel
-        end
+        return unless @lines.size == cols.size
+        add_line
+        build_panel
       end
     end
   end

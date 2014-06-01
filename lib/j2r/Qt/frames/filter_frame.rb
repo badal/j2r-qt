@@ -94,11 +94,10 @@ module JacintheReports
         build_buttons
         @entry.clear
         @entry.enabled = false
-        ret = @fields.build_with(field)
-        if ret
-          @entry.addItem(text)
-          @entry.enabled = true
-        end
+        ret = @fields.build_with(field) # side effect
+        return unless ret
+        @entry.addItem(text)
+        @entry.enabled = true
       end
 
       def build_values

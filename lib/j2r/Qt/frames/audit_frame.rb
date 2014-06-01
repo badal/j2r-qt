@@ -80,12 +80,12 @@ module JacintheReports
         @select.addItems(@selection_list.map { |item| item[1] })
         size = @selection_list.size
         case size
-          when 0
-            @msg.text = 'Pas de solution'
-          when 1
-            tiers_selected
-          else
-            @msg.text = "Choisir parmi #{size}"
+        when 0
+          @msg.text = 'Pas de solution'
+        when 1
+          tiers_selected
+        else
+          @msg.text = "Choisir parmi #{size}"
         end
       end
 
@@ -129,15 +129,14 @@ module JacintheReports
       def load_list
         files = 'Fichiers textes (*.txt);;Ficheirs csv (*.csv)'
         filename = Qt::FileDialog.getOpenFileName(self, 'Charger une liste', User.lists, files)
-        if filename
-          filename = filename.force_encoding('utf-8')
-          encoding = File.extname(filename) == '.csv' ? J2R.system_csv_encoding : 'utf-8'
-          lines = File.readlines(filename, encoding: encoding)
-          @list = lines.map do |line|
-            line[REGEXP]
-          end.compact.sort.uniq
-          console_message "Liste chargée, #{@list.size} tiers"
-        end
+        return unless filename
+        filename = filename.force_encoding('utf-8')
+        encoding = File.extname(filename) == '.csv' ? J2R.system_csv_encoding : 'utf-8'
+        lines = File.readlines(filename, encoding: encoding)
+        @list = lines.map do |line|
+          line[REGEXP]
+        end.compact.sort.uniq
+        console_message "Liste chargée, #{@list.size} tiers"
       end
 
       def save_list

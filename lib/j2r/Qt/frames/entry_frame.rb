@@ -94,12 +94,11 @@ module JacintheReports
 
       def load_table
         table = @entry.currentText
-        if table != INVITE_TABLE
-          @recipe.clear_with_new_table(table.to_sym)
-          emit(recipe_updated)
-          console_message 'Nouvelle maquette'
-          emit(set_tab(1))
-        end
+        return if table == INVITE_TABLE
+        @recipe.clear_with_new_table(table.to_sym)
+        emit(recipe_updated)
+        console_message 'Nouvelle maquette'
+        emit(set_tab(1))
       end
 
       def promote_recipe
