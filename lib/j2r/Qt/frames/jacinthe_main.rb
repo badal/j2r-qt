@@ -7,13 +7,6 @@
 # (c) Michel Demazure <michel@demazure.com>
 
 module JacintheReports
-
-  # # copyright
-  # COPYRIGHT = "\u00A9 Michel Demazure & Kenji Lefevre"
-  #
-  # # help directory
-  # HELP_FILE = File.expand_path('../../../../help', File.dirname(__FILE__))
-
   module GuiQt
     # Jacinthe common main window
     class JacintheMain < Qt::MainWindow
@@ -22,8 +15,6 @@ module JacintheReports
 
       # help directory
       HELP_FILE = File.expand_path('../../../../help/jacdoc.html', File.dirname(__FILE__))
-
-
 
       include Signals
       slots :about, :help

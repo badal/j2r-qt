@@ -20,6 +20,7 @@ spec = Gem::Specification.new do |s|
   s.add_runtime_dependency 'mysql2'
   s.add_runtime_dependency 'sequel'
   s.add_runtime_dependency 'qtbindings'
+  s.add_runtime_dependency 'j2r-core'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'yard'
   s.add_development_dependency 'simplecov'
@@ -66,7 +67,7 @@ end
 
 desc 'build Manifest'
 task :manifest do
-  system ' mast -x bin -x metrics -x Jacinthe -x scories -x doc -x help -x coverage -x pkg -x Claire -x sorties -x "documentation v1" -x demo * > MANIFEST'
+  system ' mast -x bin -x metrics -x doc -x bat -x help -x coverage -x pkg -x "documentation v1" -x demo * > MANIFEST'
 end
 
 import('metrics.rake')
