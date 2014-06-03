@@ -1,24 +1,22 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-# File: reporter_gui.rb
+# File: reporter_main.rb
 # Created: 10/06/12
 #
 # (c) Michel Demazure <michel@demazure.com>
 
 require 'Qt'
-require_relative 'reporter_qt.rb'
+require_relative 'reporter_elements.rb'
 
 module JacintheReports
   module GuiQt
     # reporter main window
     class ReporterMain < JacintheMain
       ABOUT = ['Rapporteur pour Jacinthe', "Version #{J2R::NAME}", 'S.M.F. 2013',
-               J2R::COPYRIGHT]
+               COPYRIGHT]
 
       QUIT_MSG = ['La maquette a été modifiée.', 'Vous aller quitter sans l\'enregistrer.']
-
-      HELP_FILE = File.join(J2R::HELP_DIR, 'jacdoc.html')
 
       # @param [String or nil] recipe_file of command line
       def initialize(recipe_file = nil)

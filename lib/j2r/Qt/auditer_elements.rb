@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-# File: auditer_qt.rb
+# File: auditer_elements.rb
 # Created 27/06/12
 #
 # (c) Michel Demazure <michel@demazure.com>

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-# File: reporter_qt.rb
+# File: reporter_elements.rb
 # Created 19/06/12
 #
 # (c) Michel Demazure <michel@demazure.com>

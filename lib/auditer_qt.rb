@@ -1,12 +1,14 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-# File: auditer.rb
+# File: auditer_qt.rb
 # Created: 18/06/12
 #
 # (c) Michel Demazure <michel@demazure.com>
 
-require_relative 'j2r.rb'
+require_relative 'version.rb'
+require 'j2r/jaccess'
+require 'j2r/core'
 
 J2R.for_user do
   J2R.logger.info('start auditer')

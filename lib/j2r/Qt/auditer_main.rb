@@ -1,22 +1,20 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-# File: auditer_gui.rb
+# File: auditer_main.rb
 # Created: 27/06/12
 #
 # (c) Michel Demazure <michel@demazure.com>
 
 require 'Qt'
-require_relative 'auditer_qt.rb'
+require_relative 'auditer_elements.rb'
 
 module JacintheReports
   module GuiQt
     # main auditer window
     class AuditerMain < JacintheMain
       ABOUT = ['Auditeur pour Jacinthe', "Version #{J2R::NAME}", 'S.M.F. 2013',
-               J2R::COPYRIGHT]
-
-      HELP_FILE = File.join(J2R::HELP_DIR, 'jacdoc.html')
+               COPYRIGHT]
 
       # @return [AuditerMain] new instance
       # @param [String] initial_hint string given

@@ -5,7 +5,7 @@
    **JacintheReports** is a utility library to produce reports from the Jacinthe-DB database.
 
 ## Version
-   Jacinthe rouge, v2.3, being converted to 3.0
+   Jacinthe violette, version 3.0
 
 ## Dependencies
   * checked on ruby 1.9.3 (on Windows and OSX) and on ruby 2.0.0 (on Centos)
@@ -13,21 +13,13 @@
   * gem sequel (3. or 4.)
   * gem qtbindings (for GUI)
   * gem prawn (for producing PDF)
-
-## System
-  * OS identification in 'j2r.rb'
-  * Works in Windows and OSX : specific tests win? and darwin?
-  * For other systems, add in 'j2r.rb' the necessary test
-  and complete the methods where the tests are used.
-
+  * gems j2r-core and j2r-jaccess
+  
 ## Usage
 
 ### Parameters
-  * Default DATA directories are in 'j2r/files_and_directories.rb'
-  * Connection parameters are in the file 'DATA/config/connect.ini'
-  * Extended fields and joins building parameters are in 'DATA/config/joins.ini'
   * Sources tables for the reporter are in 'DATA/config/sources.ini'
-  * For user parameters, see the documentation (see also 'j2r/recipes.user.rb'
+  * For user parameters, see the documentation (see also in j2r-core, 'j2r/recipes/user.rb')
 
 ### Installation (and each time the database structure changes)
   * To parametrize and build the DATA files (each time the database structure changes),
@@ -36,9 +28,8 @@
   * See the detailed documentation
 
 ### Exploitation
-  * reporter.rb starts the reporter GUI
-  * auditer.rb starts the auditer GUI
-  * batch\_reporter.rb and tableau\_de\_bord.rb are batch utilities
+  * reporter_qt.rb starts the reporter GUI
+  * auditer_qt.rb starts the auditer GUI
 
 ## More documentation
   * Specific "Mode d'emploi" for users
@@ -55,7 +46,7 @@
    * [Issue Tracker](https://bitbucket.org/mdemazure/j2r/issues?status=new&status=openissues/new)
 
 ## Copyright
-  * (c) 2012-2013, Michel Demazure
+  * (c) 2012-2014, Michel Demazure
 
 ## License
   *  See LICENSE (MIT)

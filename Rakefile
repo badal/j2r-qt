@@ -5,7 +5,7 @@ require 'yard/rake/yardoc_task'
 
 require 'rake/testtask'
 
-require_relative 'lib/j2r.rb'
+require_relative 'lib/version.rb'
 
 spec = Gem::Specification.new do |s|
   s.name = 'JacintheReports'
