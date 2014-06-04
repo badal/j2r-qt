@@ -1,3 +1,6 @@
+## [v3.1.0]
+* restructured directories
+
 ## [v3.0.2]
 * renamed toplevel executables with qt_ prefix
 * changed 'auditer' to 'auditor'

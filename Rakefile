@@ -5,7 +5,7 @@ require 'yard/rake/yardoc_task'
 
 require 'rake/testtask'
 
-require_relative 'lib/version.rb'
+require_relative 'lib/j2r/qt/version.rb'
 
 spec = Gem::Specification.new do |s|
   s.name = 'j2r-qt'
