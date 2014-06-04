@@ -7,20 +7,20 @@
 # (c) Michel Demazure <michel@demazure.com>
 
 require 'Qt'
-require_relative 'auditer_elements.rb'
+require_relative 'auditor_elements.rb'
 
 module JacintheReports
   module GuiQt
     # main auditer window
-    class AuditerMain < JacintheMain
+    class AuditorMain < JacintheMain
       ABOUT = ['Auditeur pour Jacinthe', "Version #{J2R::NAME}", 'S.M.F. 2013',
                COPYRIGHT]
 
-      # @return [AuditerMain] new instance
+      # @return [AuditorMain] new instance
       # @param [String] initial_hint string given
       def initialize(initial_hint = nil)
         super()
-        add_central_widget(AuditerCentralWidget.new(initial_hint))
+        add_central_widget(AuditorCentralWidget.new(initial_hint))
         resize(400, 550)
         self.window_title = "Auditeur pour #{J2R::NAME}"
         window.window_icon = Icons.from_file('Board-11-Flowers-icon.png')

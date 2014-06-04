@@ -1,5 +1,6 @@
 ## [v3.0.2]
 * renamed toplevel executables with qt_ prefix
+* changed 'auditer' to 'auditor'
 
 ##[v3.0.1]
 * uses local gems `j2r-jaccess` and `j2r-core`

@@ -9,12 +9,12 @@
 module JacintheReports
   module GuiQt
     # central widget for auditer
-    class AuditerCentralWidget < Qt::Widget
+    class AuditorCentralWidget < Qt::Widget
       include Signals
       slots 'console_message (const QString&)', 'show_html (const QString&)'
       signals 'status_message (const QString&)'
 
-      # @return [AuditerCentralWidget] new instance
+      # @return [AuditorCentralWidget] new instance
       # @param [String] initial_hint string given
       def initialize(initial_hint)
         super()

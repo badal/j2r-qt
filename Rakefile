@@ -8,7 +8,7 @@ require 'rake/testtask'
 require_relative 'lib/version.rb'
 
 spec = Gem::Specification.new do |s|
-  s.name = 'JacintheReports'
+  s.name = 'j2r-qt'
   s.version = JacintheReports::VERSION
   s.has_rdoc = true
   s.extra_rdoc_files = %w(README.md LICENSE)
@@ -16,7 +16,7 @@ spec = Gem::Specification.new do |s|
   s.description = 'To be replaced'
   s.author = 'Michel Demazure'
   s.email = 'michel@demazure.com'
-  s.homepage = 'http://github.com/badal/J2R'
+  s.homepage = 'http://github.com/badal/j2r_qt'
   s.add_runtime_dependency 'mysql2'
   s.add_runtime_dependency 'sequel'
   s.add_runtime_dependency 'qtbindings'
@@ -27,13 +27,14 @@ spec = Gem::Specification.new do |s|
   # s.executables = ['your_executable_here']
   s.files = %w(LICENSE README.md MANIFEST Rakefile) + Dir.glob('{bin,lib,bat,spec}/**/*')
   s.require_path = 'lib'
-  s.bindir = 'bin'
+  s.license = 'MIT'
 end
 
 Gem::PackageTask.new(spec) do |p|
+  p.package_dir = ENV['LOCAL_GEMS']
   p.gem_spec = spec
   p.need_tar = false
-  p.need_zip = true
+  p.need_zip = false
 end
 
 # noinspection RubyArgCount

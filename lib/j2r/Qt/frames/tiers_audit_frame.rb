@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-# File: audit_frame.rb
+# File: tiers_audit_frame.rb
 # Created: 27/06/12
 #
 # (c) Michel Demazure <michel@demazure.com>
