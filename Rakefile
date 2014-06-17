@@ -24,8 +24,8 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
   s.add_development_dependency 'yard'
   s.add_development_dependency 'simplecov'
-  # s.executables = ['your_executable_here']
-  s.files = %w(LICENSE README.md MANIFEST Rakefile) + Dir.glob('{bin,lib,bat,spec}/**/*')
+  s.executables = %w(reporter auditor)
+  s.files = %w(LICENSE README.md MANIFEST Rakefile) + Dir.glob('{bin,lib}/**/*')
   s.require_path = 'lib'
   s.license = 'MIT'
 end
@@ -68,7 +68,7 @@ end
 
 desc 'build Manifest'
 task :manifest do
-  system ' mast -x bin -x metrics -x doc -x bat -x help -x coverage -x pkg -x "documentation v1" -x demo * > MANIFEST'
+  system ' mast -x .rubocop.yml -x metrics -x doc -x bat -x help -x coverage -x pkg -x "documentation v1" -x demo * > MANIFEST'
 end
 
 import('metrics.rake')

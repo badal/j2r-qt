@@ -1,4 +1,6 @@
-#!mast -x bin -x metrics -x doc -x bat -x help -x coverage -x pkg -x documentation v1 -x demo bat bin doc documentation v1 Gemfile Gemfile.lock help HISTORY.md lib LICENSE MANIFEST metrics metrics.rake Rakefile README.md TODO.md
+#!mast -x .rubocop.yml -x metrics -x doc -x bat -x help -x coverage -x pkg -x documentation v1 -x demo bin doc documentation v1 Gemfile Gemfile.lock help HISTORY.md lib LICENSE MANIFEST metrics metrics.rake Rakefile README.md TODO.md
+bin/auditor
+bin/reporter
 Gemfile
 Gemfile.lock
 HISTORY.md
