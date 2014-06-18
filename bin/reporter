@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+# File: reporter
+# Created: 18/06/14
+#
+# (c) Michel Demazure <michel@demazure.com>
+
+require 'j2r/jaccess'
+require 'j2r/core'
+require 'j2r/qt/reporter_qt'
+
+

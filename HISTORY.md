@@ -1,4 +1,7 @@
-## [v3.1.0]
+##[v3.1.1]
+* added executables
+
+##[v3.1.0]
 * restructured directories
 
 ## [v3.0.2]
@@ -14,9 +17,7 @@
 
 #[v3]
 
-##[v2.3.1]
-
-##[v2.3.0]
+##[v2.3.0], [v2.3.1]
 * 2.3.0.1 - 2.3.0.4 : ajout des opérations de colonnes : somme
 * 2.3.0.5 - 2.3.0.7 : opérations statistiques : moyenne, variance, écart-type
 * 2.3.0.8 : style corrections
