@@ -17,8 +17,6 @@ spec = Gem::Specification.new do |s|
   s.author = 'Michel Demazure'
   s.email = 'michel@demazure.com'
   s.homepage = 'http://github.com/badal/j2r_qt'
-  s.add_runtime_dependency 'mysql2'
-  s.add_runtime_dependency 'sequel'
   s.add_runtime_dependency 'qtbindings'
   s.add_runtime_dependency 'j2r-core'
   s.add_development_dependency 'rake'

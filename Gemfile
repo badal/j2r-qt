@@ -1,12 +1,8 @@
 source "http://rubygems.org"
 
 group :exploitation do
-  gem "mysql2", "0.3.13"
-  gem "sequel"
-  gem "prawn"
   gem "qtbindings"
-  gem 'j2r-core'
-  gem 'j2r-jaccess'
+  gem 'j2r-core', github: 'badal/j2r-core', branch: 'master'
 end
 
 group :development do
