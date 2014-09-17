@@ -54,7 +54,7 @@ module JacintheReports
       end
 
       def lines_and_columns
-        lines, columns = [@lines, @columns].map { |combo| combo.currentText }
+        lines, columns = [@lines, @columns].map(&:currentText)
         exporting = @recipe.exporting
         exporting[:lines] = lines unless @lines.no_field
         exporting[:columns] = columns unless @columns.no_field

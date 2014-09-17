@@ -166,7 +166,7 @@ module JacintheReports
       end
 
       def check
-        positives = @selections.select { |line| line.last }.map(&:first).uniq
+        positives = @selections.select(&:last).map(&:first).uniq
         sizes = positives.map do |positive|
           @selections.select { |line| line.first == positive }.size
         end

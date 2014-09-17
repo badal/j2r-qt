@@ -6,9 +6,6 @@
 #
 # (c) Michel Demazure <michel@demazure.com>
 
-require 'j2r/jaccess'
-require 'j2r/core'
-
 require_relative 'version.rb'
 
 J2R.for_user do

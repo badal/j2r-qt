@@ -114,7 +114,7 @@ module JacintheReports
       end
 
       def incomplete_selection
-        @field.no_field || @identifications.all? { |combo| combo.no_field } ||
+        @field.no_field || @identifications.all?(&:no_field) ||
             @value_in.joker? || @value_out.joker?
       end
 
