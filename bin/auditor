@@ -8,4 +8,4 @@
 
 require 'j2r/jaccess'
 require 'j2r/core'
-require 'j2r/qt/auditer_qt'
+require 'j2r/qt/auditor_qt'
