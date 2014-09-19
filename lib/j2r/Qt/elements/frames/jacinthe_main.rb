@@ -14,7 +14,7 @@ module JacintheReports
       COPYRIGHT = "\u00A9 Michel Demazure & Kenji Lefevre"
 
       # help directory
-      HELP_FILE = File.expand_path('../../../../../help/jacdoc.html', File.dirname(__FILE__))
+      HELP_FILE = File.expand_path('help/jacdoc.html', JacintheReports::DATA)
 
       include Signals
       slots :about, :help
