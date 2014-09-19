@@ -23,7 +23,7 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency 'yard'
   s.add_development_dependency 'simplecov'
   s.executables = %w(reporter auditor)
-  s.files = %w(LICENSE README.md MANIFEST Rakefile) + Dir.glob('{bin,lib}/**/*')
+  s.files = %w(LICENSE README.md MANIFEST Rakefile) + Dir.glob('{bin,lib,help}/**/*')
   s.require_path = 'lib'
   s.license = 'MIT'
 end
