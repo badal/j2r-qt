@@ -2,7 +2,6 @@
 Gemfile
 Gemfile.lock
 HISTORY.md
-lib/.rubocop.yml
 lib/j2r/qt/auditor_qt.rb
 lib/j2r/qt/elements/auditor_elements.rb
 lib/j2r/qt/elements/auditor_main.rb
