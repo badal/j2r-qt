@@ -41,7 +41,7 @@ module JacintheReports
         set_color(YELLOW)
         @source = source
         connect_enabling(source) if defined?(ParametrizerFrame) &&
-            source.is_a?(JacintheReports::GuiQt::ParametrizerFrame)
+                                    source.is_a?(JacintheReports::GuiQt::ParametrizerFrame)
         build_top
         @layout.add_widget(HLine.new)
         build_bottom

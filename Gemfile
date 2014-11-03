@@ -1,7 +1,7 @@
-source "http://rubygems.org"
+source 'http://rubygems.org'
 
 group :exploitation do
-  gem "qtbindings", '=4.8.5.2'
+  gem 'qtbindings', '=4.8.5.2'
   gem 'j2r-jaccess', git: 'C:/Users/Michel/Documents/Share/dev_ruby/j2r-jaccess', branch: 'master'
   gem 'j2r-core', git: 'C:/Users/Michel/Documents/Share/dev_ruby/j2r-core', branch: 'master'
 
@@ -9,8 +9,8 @@ end
 
 group :development do
   gem 'rake'
-  gem "yard"
+  gem 'yard'
   gem 'minitest'
   gem 'minitest-reporters'
-  gem "simplecov"
+  gem 'simplecov'
 end
