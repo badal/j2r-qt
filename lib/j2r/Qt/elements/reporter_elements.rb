@@ -8,6 +8,7 @@
 
 require_relative 'signals.rb'
 require_relative 'icons.rb'
+require_relative 'extensions.rb'
 
 require_relative 'frames/panel_frame.rb'
 require_relative 'frames/dialogs.rb'
