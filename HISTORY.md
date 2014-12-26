@@ -1,6 +1,3 @@
-##[v3.1.1]
-* added executables
-
 ##[v3.1.0]
 * restructured directories
 

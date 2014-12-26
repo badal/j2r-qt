@@ -14,7 +14,7 @@
   * gem qtbindings (for GUI)
   * gem prawn (for producing PDF)
   * gems j2r-core and j2r-jaccess
-  
+
 ## Usage
 
 ### Parameters
@@ -43,8 +43,7 @@
    [![Code Climate](https://codeclimate.com/github/badal/j2r-qt.png)](https://codeclimate.com/github/badal/jacman-qt)
 
    * Source code on repository [GitHub](https://github.com/badal/j2r-qt)
-   * [Issue Tracker](https://bitbucket.org/mdemazure/j2r/issues?status=new&status=openissues/new)
-
+  
 ## Copyright
   * (c) 2012-2014, Michel Demazure
 
