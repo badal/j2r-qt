@@ -1,3 +1,7 @@
+##[v3.2.0]
+* protection added against saving/viewing report when not re-processed 
+
+
 ##[v3.1.0]
 * restructured directories
 

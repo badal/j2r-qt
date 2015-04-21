@@ -77,6 +77,7 @@ module JacintheReports
         save_recipe_elements
         if dia.exec == 1
           frame.update_recipe
+          @recipe.processed = false
           emit(recipe_updated)
           Array(action).each { |act| send act }
         else

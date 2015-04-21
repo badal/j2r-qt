@@ -1,24 +1,26 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-# File: export_layout.rb
-# Created: 18/06/12
+# File: save_and_show_layout.rb
+# Created: 18/06/12,
+# Updated with check protection and renamed: 23/4/2015
 #
 # (c) Michel Demazure <michel@demazure.com>
 
 module JacintheReports
   module GuiQt
     # common layout for exporting panels
-    class ExportLayout < Qt::BoxLayout
+    class SaveAndShowLayout < Qt::BoxLayout
       FORMATS = %w(html csv pdf)
 
       include Signals
       signals 'ask_console_message (const QString&)'
       slots :save_report, :open_report, :format_changed
 
-      def initialize(direction)
+      def initialize(direction, recipe)
         super(layout_direction(direction))
         @report = nil
+        @recipe = recipe
         add_widget(Qt::Label.new('Format'))
         @format = PrettyCombo.new(10)
         @format.addItems(FORMATS)
@@ -56,6 +58,7 @@ module JacintheReports
       def load_report(report)
         @report = report
         @save_button.enabled = true
+        @recipe.processed = true
         format_changed
       end
 
@@ -63,12 +66,21 @@ module JacintheReports
         @show_button.enabled = ! (@format.currentText == 'pdf' || @report.nil?)
       end
 
+      def check
+        msg = "Le rapport n'a pas été créé après la modification de la maquette"
+        @recipe.processed || Dialog.confirm(msg)
+      end
+
       def save_report
+        return unless check
+        puts @recipe.processed
+        return
         format = @format.currentText
         console_message send("output_#{format}".to_sym)
       end
 
       def open_report
+        return unless check
         format = @format.currentText
         send "open_#{format}".to_sym
       end

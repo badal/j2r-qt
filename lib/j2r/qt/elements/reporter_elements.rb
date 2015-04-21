@@ -12,7 +12,7 @@ require_relative 'extensions.rb'
 
 require_relative 'frames/panel_frame.rb'
 require_relative 'frames/dialogs.rb'
-require_relative 'frames/export_layout.rb'
+require_relative 'frames/save_and_show_layout.rb'
 require_relative 'frames/pretty_frame.rb'
 require_relative 'frames/pretty_combo.rb'
 require_relative 'frames/model_data_frame.rb'

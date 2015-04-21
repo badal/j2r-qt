@@ -76,6 +76,7 @@ module JacintheReports
         @recipe.filename = filename
         emit(recipe_updated)
         emit(recipe_saved)
+        @recipe.processed = false
         console_message "Maquette chargée depuis '#{filename}'"
       rescue => err
         J2R.logger.error(err.message)

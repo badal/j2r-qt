@@ -27,7 +27,7 @@ module JacintheReports
         @runner = Recipes::Runner.new(recipe)
       end
 
-      def_delegators :@recipe, :all_fields, :db_table, :columns, :exporting
+      def_delegators :@recipe, :all_fields, :db_table, :columns, :exporting, :processed, :processed=
       def_delegators :@runner, :table_for_report, :table_for_bundle, :build_table, :tiers_list
 
       def build_panel

@@ -28,8 +28,8 @@ module JacintheReports
         @button = Qt::PushButton.new('Créer')
         @layout.add_widget(@button)
         @layout.add_widget(HLine.new)
-        @export = ExportLayout.new(:vertical)
-        @layout.addLayout(@export)
+        @save_and_show = SaveAndShowLayout.new(:vertical, @recipe)
+        @layout.addLayout(@save_and_show)
         @layout.insert_spacing(5, 45)
         @layout.insert_spacing(7, 15)
         @layout.addStretch
@@ -38,7 +38,7 @@ module JacintheReports
 
       def connect_signals
         connect_button(@button, :create_report)
-        console_connect(@export)
+        console_connect(@save_and_show)
       end
 
       def build_panel
@@ -59,7 +59,7 @@ module JacintheReports
         @recipe.exporting[:title] = title
         report = process_with(title)
         return unless report
-        @export.load_report(report)
+        @save_and_show.load_report(report)
         show_html(report.html_sample)
         console_message "Rapport '#{title}' créé, nombre de lignes #{report.size} au total"
       end

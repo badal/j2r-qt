@@ -6,7 +6,14 @@
 #
 # (c) Michel Demazure <michel@demazure.com>
 
+# added 22/4/2015 for output protection (see save_and_show_layout.rb)
 module JacintheReports
+  module Recipes
+    class Recipe
+      attr_accessor :processed
+    end
+  end
+
   module GuiQt
     # central widget for reporter
     class ReporterCentralWidget < Qt::Widget
@@ -27,6 +34,7 @@ module JacintheReports
         @recipe = Recipes::Recipe.empty
         @initial_recipe_file = initial_recipe_file
         recipe_saved
+        @recipe.processed = false
         add_frames
       end
 
@@ -43,6 +51,7 @@ module JacintheReports
         layout.add_widget(@tab_widget)
       end
 
+      # WARNING: not used
       def initial_load_recipe(recipe_file)
         @recipe = Recipes::Recipe.from_yaml_path(recipe_file)
         @tab_widget.setCurrentIndex(2)

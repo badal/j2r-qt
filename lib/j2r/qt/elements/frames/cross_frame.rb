@@ -73,7 +73,6 @@ module JacintheReports
         cross_table = @recipe.build_table([lines, columns]).cross_table(lines, columns)
         report = Reports::Report.new(cross_table, 'Tableau croisé')
         @save_and_show.load_report(report)
-        @recipe.processed= true
         emit(ask_show_html(cross_table.doc_for_html))
       end
     end
