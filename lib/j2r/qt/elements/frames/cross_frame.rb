@@ -31,8 +31,8 @@ module JacintheReports
         @cross = Qt::PushButton.new('Créer')
         @layout.add_widget(@cross)
         @layout.add_widget(HLine.new)
-        @left = ExportLayout.new(:vertical)
-        @layout.addLayout(@left)
+        @save_and_show = SaveAndShowLayout.new(:vertical, @recipe)
+        @layout.addLayout(@save_and_show)
         @layout.insertSpacing(5, 45)
         @layout.insertSpacing(7, 15)
         @layout.addStretch
@@ -72,7 +72,8 @@ module JacintheReports
         console_message "Tableau croisé ; lignes : #{lines}; colonnes : #{columns}"
         cross_table = @recipe.build_table([lines, columns]).cross_table(lines, columns)
         report = Reports::Report.new(cross_table, 'Tableau croisé')
-        @left.load_report(report)
+        @save_and_show.load_report(report)
+        @recipe.processed= true
         emit(ask_show_html(cross_table.doc_for_html))
       end
     end
