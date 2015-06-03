@@ -7,31 +7,10 @@ require 'rake/testtask'
 
 require_relative 'lib/j2r/qt/version.rb'
 
-spec = Gem::Specification.new do |s|
-  s.name = 'j2r-qt'
-  s.version = JacintheReports::VERSION
-  s.has_rdoc = true
-  s.extra_rdoc_files = %w(README.md LICENSE)
-  s.summary = 'JacintheReports is a utility library to produce reports from the Jacinthe-DB database'
-  s.description = 'To be replaced'
-  s.author = 'Michel Demazure'
-  s.email = 'michel@demazure.com'
-  s.homepage = 'http://github.com/badal/j2r_qt'
-  s.add_runtime_dependency 'qtbindings'
-  s.add_runtime_dependency 'j2r-core'
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'yard'
-  s.add_development_dependency 'simplecov'
-  s.files = %w(LICENSE README.md MANIFEST Rakefile) + Dir.glob('lib/**/*')
-  s.require_path = 'lib'
-  s.license = 'MIT'
-end
-
-Gem::PackageTask.new(spec) do |p|
-  p.package_dir = ENV['LOCAL_GEMS']
-  p.gem_spec = spec
-  p.need_tar = false
-  p.need_zip = false
+desc 'build gem file'
+task :build_gem do
+  system 'gem build j2r-qt.gemspec'
+  FileUtils.mv(Dir.glob('*.gem'), ENV['LOCAL_GEMS'])
 end
 
 # noinspection RubyArgCount
