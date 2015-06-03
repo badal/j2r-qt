@@ -11,7 +11,7 @@ module JacintheReports
     # line for filter panel
     class FilterLine < Qt::HBoxLayout
       include Signals
-      slots :field_changed, :update_selection, :keep, :no_keep, :erase_selection
+      slots :keep, :no_keep, :erase_selection
       signals 'changed( int )'
 
       def initialize(index, recipe)
@@ -46,8 +46,8 @@ module JacintheReports
       def connect_signals
         connect_button(@select, :keep)
         connect_button(@unselect, :no_keep)
-        connect(@fields, SIGNAL_ACTIVATED, self, SLOT(:field_changed))
-        connect(@entry, SIGNAL_ACTIVATED, self, SLOT(:update_selection))
+        connect(@fields, SIGNAL_ACTIVATED) { field_changed }
+        connect(@entry, SIGNAL_ACTIVATED) { update_selection }
         connect_button(@erase, :erase_selection)
       end
 

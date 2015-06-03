@@ -73,8 +73,6 @@ module JacintheReports
 
       def save_report
         return unless check
-        puts @recipe.processed
-        return
         format = @format.currentText
         console_message send("output_#{format}".to_sym)
       end

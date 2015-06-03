@@ -17,7 +17,7 @@ module JacintheReports
 
       TABLES = [INVITE_TABLE] + SOURCES
 
-      slots :exploit_recipe, :modify_recipe, :new_recipe, :load_table, :promote_recipe
+      slots :exploit_recipe, :modify_recipe, :new_recipe, :promote_recipe
       signals :recipe_saved
 
       def initialize(recipe)
@@ -56,7 +56,7 @@ module JacintheReports
         entry = PrettyCombo.new(20)
         entry.addItems(TABLES)
         entry.enabled = true
-        connect(entry, SIGNAL_ACTIVATED, self, SLOT(:load_table))
+        connect(entry, SIGNAL_ACTIVATED) { load_table }
         entry
       end
 
