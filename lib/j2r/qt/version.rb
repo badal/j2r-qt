@@ -11,7 +11,7 @@ module JacintheReports
   # major version number
   MAJOR = 3
   # minor version number
-  MINOR = 2
+  MINOR = 3
   # tiny version number
   TINY = 1
   # version

@@ -87,10 +87,13 @@ module JacintheReports
       def update_recipe
         @panel = @lines.map(&:selection)
         cols = @recipe.columns
+        filters = @recipe.filters
         cols.clear
         @panel.each do |(field, name)|
           next if field == FieldCombo::FIRSTLINE || name.empty?
           cols[field.to_sym] = name
+          next if filters.map(&:first).include?(field.to_sym)
+          filters << [field.to_sym, Recipes::JOKER, true]
         end
         return unless @lines.size == cols.size
         add_line
