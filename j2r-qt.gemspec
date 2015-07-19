@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = 'Reporter for Jacinthe'
   s.author = 'Michel Demazure'
   s.email = 'michel@demazure.com'
-  s.add_runtime_dependency 'qtbindings'
+ # s.add_runtime_dependency 'qtbindings'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'yard'
   s.homepage = 'http://github.com/badal/j2r-qt'
