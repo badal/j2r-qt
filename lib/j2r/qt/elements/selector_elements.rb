@@ -13,7 +13,7 @@ require_relative 'frames/dialogs.rb'
 require_relative 'frames/pretty_frame.rb'
 require_relative 'frames/pretty_combo.rb'
 require_relative 'frames/mailing_frame.rb'
-# require_relative 'frames/tiers_audit_frame.rb'
+require_relative 'frames/selection_frame.rb'
 require_relative 'frames/jacinthe_main.rb'
 
 require_relative 'frames/selector_central_widget.rb'

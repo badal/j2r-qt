@@ -19,25 +19,31 @@ module JacintheReports
       def initialize
         super()
         layout = Qt::VBoxLayout.new(self)
+
         # @head_label = Qt::Label.new
         # layout.add_widget(@head_label)
         # @show_zone = Qt::TextEdit.new(Qt::Frame.new)
         # layout.add_widget(@show_zone)
         horizontal = Qt::HBoxLayout.new
         layout.addLayout(horizontal)
-      #  @audit_frame = TiersAuditFrame.new(initial_hint)
-       # horizontal.add_widget(@audit_frame)
+        @selection_frame = SelectionFrame.new
+        horizontal.add_widget(@selection_frame)
         list_tool = Object.new
+        def list_tool.tiers_list
+          [1, 2, 3]
+        end
         @mailing_frame = MailingFrame.new(list_tool)
         horizontal.add_widget(@mailing_frame)
         horizontal.addStretch
+        @show_zone = Qt::TextEdit.new(Qt::Frame.new)
+        layout.add_widget(@show_zone)
         layout.addStretch
-      #  connect_signals
+        connect_signals
       end
 
       def connect_signals
-        show_connect(@audit_frame)
-        console_connect(@audit_frame)
+        show_connect(@selection_frame)
+        console_connect(@selection_frame)
         show_connect(@mailing_frame)
         console_connect(@mailing_frame)
       end
