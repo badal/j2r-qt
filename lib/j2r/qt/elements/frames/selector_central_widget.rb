@@ -30,7 +30,7 @@ module JacintheReports
         horizontal.add_widget(@selection_frame)
         list_tool = Object.new
         def list_tool.tiers_list
-          [1, 2, 3]
+          (1..10).to_a
         end
         @mailing_frame = MailingFrame.new(list_tool)
         horizontal.add_widget(@mailing_frame)
@@ -46,6 +46,9 @@ module JacintheReports
         console_connect(@selection_frame)
         show_connect(@mailing_frame)
         console_connect(@mailing_frame)
+        connect(@selection_frame, SIGNAL(:list_changed)) do
+          @mailing_frame.source = @selection_frame.selector
+         end
       end
 
       # send the message to the console (overrides)

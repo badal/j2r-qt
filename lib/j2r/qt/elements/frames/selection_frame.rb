@@ -10,8 +10,12 @@ module JacintheReports
   module GuiQt
     # selection panel
     class SelectionFrame < PrettyFrame
+      slots :build_list
+      signals :list_changed
 
       SELECTIONS = ['Un', 'Deux']
+
+      attr_accessor :selector
 
       def initialize
         extend Enabling if defined?(ReporterMain)
@@ -19,9 +23,9 @@ module JacintheReports
         set_color(YELLOW)
         build_top
         @layout.add_widget(HLine.new)
-     #   build_bottom
+        build_bottom
         @layout.insertSpacing(8, 15)
-        @layout.addStretch
+         @layout.addStretch
       #  enable_choices(false)
       end
 
@@ -31,13 +35,16 @@ module JacintheReports
         @parameter_two = selection_widget('Paramètre 2', [])
         # @state = selection_widget('Etat', ETATS)
         # @zone = selection_widget('Zone', ZONES)
-        # button = Qt::PushButton.new('Créer')
-        # connect_button(button, :build_output_list)
-        # @layout.add_widget(button)
-
         connect(@criterion, SIGNAL_ACTIVATED) { choice_made }
         connect(@parameter_one, SIGNAL_ACTIVATED) { parameter_fixed(1)}
         connect(@parameter_two, SIGNAL_ACTIVATED) { parameter_fixed(2)}
+
+      end
+
+      def build_bottom
+        @button = Qt::PushButton.new('Créer')
+        @layout.add_widget(@button)
+        connect_button(@button, :build_list)
       end
 
       def choice_made
@@ -60,11 +67,20 @@ module JacintheReports
         @layout.add_widget(Qt::Label.new(label))
         combo = PrettyCombo.new(20)
         combo.enabled = true
+     #    combo.editable = false
         combo.addItems(items)
         @layout.add_widget(combo)
         combo
       end
 
+      def build_list
+        @selector = Object.new
+        def @selector.tiers_list
+          [15]
+        end
+        emit(list_changed)
+         puts "OK"
+      end
     end
   end
 end
