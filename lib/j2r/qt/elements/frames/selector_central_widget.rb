@@ -2,211 +2,44 @@
 # encoding: utf-8
 
 # File: selector_central_widget.rb
-# Created:  19/7/15
+# Created:  2/10/15
 #
 # (c) Michel Demazure <michel@demazure.com>
 
 module JacintheReports
   module GuiQt
-      # central widget for selector
+    # central widget for auditer
     class SelectorCentralWidget < Qt::Widget
-      SAMPLE_SIZE = 8
-
       include Signals
-      slots :selection_updated # :recipe_saved
-      slots 'console_message (const QString&)', 'show_html (const QString&)', 'tab_changed (int)'
+
+      slots 'console_message (const QString&)', 'show_html (const QString&)'
       signals 'status_message (const QString&)'
 
-      # @return [Bool] whether the recipe need to be saved
-      attr_reader :need_saving
-
-      # @return SelectorCentralWidget] new instance
+      # @return [SelectorCentralWidget] new instance
       def initialize
         super()
-        build_layout
-        init_selections
-        @selections = []
-        @need_saving = false
-      end
-
-      def build_layout
-        @layout = Qt::VBoxLayout.new(self)
-        @head_label = Qt::Label.new
-        @layout.add_widget(@head_label)
-        @show_zone = Qt::TextEdit.new(Qt::Frame.new)
-        @show_zone.read_only = true
-        @layout.add_widget(@show_zone)
-        @index = 0
-        @panels = []
-        add_horiz
-        add_horiz
-       #  emit(recipe_updated)
-      end
-
-      def add_horiz
-        horiz = Qt::HBoxLayout.new
-        @layout.add_layout(horiz)
-        3.times { @panels << add_new_panel(horiz) }
-      end
-
-      def add_new_panel(layout)
-        @index += 1
-        panel = SelectorFrame.new(@index)
-        layout.add_layout(panel)
-        connect(panel, SIGNAL(:selection_updated), self, SLOT(:selection_updated))
-        panel
-      end
-
-      # send the message to the console (overrides)
-      # @param [String] msg message to transmit
-      def console_message(msg)
-        emit(status_message(msg.force_encoding('utf-8')))
-      end
-
-      # send the text to the show area (overrides)
-      # @param [String] html text to show
-      def show_html(html)
-        @show_zone.setHtml(html.force_encoding('utf-8'))
-      end
-
-      def init_selections
-        @selections = @panels
-        ################
-
-      end
-
-      def selection_updated
-
-        p @panels.select(&:updated)
-
-        p @panels.first.selection.take(10)
-        return
-        ################
-
-        puts @panel.updated
-        table = @panel.selection
-        show_sample(table)
-        # FIXME: for tests
-  #      @need_saving = true
-
-      end
-
-      # show a random sample of the table
-      # @param [Table] table table to be shown
-      def show_sample(table)
-        table_size = table.size
-        if table_size == 0
-          @head_label.text = '<b>Liste vide</b>'
-        else
-          @head_label.text = "<b>Taille de la liste : #{table_size} lignes."
-        end
-        sample = '<h3>Echantillon de la liste</h3>' + table.sample_for_html(SAMPLE_SIZE)
-        show_html(sample)
-      end
-
-      # def build_panel
-      #   @table.text = "<b>Table : </b> #{@recipe.db_table}"
-      #   update
-      # end
-
-
-    end
-  end
-end
-
-
-__END__
-
-
-
-        @recipe = Recipes::Recipe.empty
-        @initial_recipe_file = initial_recipe_file
-        recipe_saved
-        @recipe.processed = false
-        add_frames
-      end
-
-      def build_layout
         layout = Qt::VBoxLayout.new(self)
-        @head_label = Qt::Label.new
-        layout.add_widget(@head_label)
-        @show_zone = Qt::TextEdit.new(Qt::Frame.new)
-        @show_zone.read_only = true
-        layout.add_widget(@show_zone)
-        @tab_widget = Qt::TabWidget.new
-        #   @tab_widget.tabPosition = qt::TabWidget::West
-        @tab_widget.tabShape = Qt::TabWidget::Triangular
-        layout.add_widget(@tab_widget)
+        # @head_label = Qt::Label.new
+        # layout.add_widget(@head_label)
+        # @show_zone = Qt::TextEdit.new(Qt::Frame.new)
+        # layout.add_widget(@show_zone)
+        horizontal = Qt::HBoxLayout.new
+        layout.addLayout(horizontal)
+      #  @audit_frame = TiersAuditFrame.new(initial_hint)
+       # horizontal.add_widget(@audit_frame)
+        list_tool = Object.new
+        @mailing_frame = MailingFrame.new(list_tool)
+        horizontal.add_widget(@mailing_frame)
+        horizontal.addStretch
+        layout.addStretch
+      #  connect_signals
       end
 
-      # WARNING: not used
-      def initial_load_recipe(recipe_file)
-        @recipe = Recipes::Recipe.from_yaml_path(recipe_file)
-        @tab_widget.setCurrentIndex(2)
-        recipe_saved
-        console_message "Maquette chargée depuis ''#{recipe_file}''"
-      rescue StandardError
-        console_message "Je n'ai pas pu charger '#{recipe_file}''"
-      end
-
-      def add_frames
-        connect(@tab_widget, SIGNAL('currentChanged (int)'), self, SLOT('tab_changed (int)'))
-        entry_frame = EntryFrame.new(@recipe)
-        add_tab_frame(entry_frame, 'Fichier')
-        data_frame = DataFrame.new(@recipe)
-        add_tab_frame(data_frame, 'Sélectionner')
-        [entry_frame, data_frame].each do |frame|
-          connect(frame, SIGNAL(:recipe_saved), self, SLOT(:recipe_saved))
-        end
-        add_tab_frame(ExportFrame.new(@recipe), 'Exploiter')
-        entry_frame.do_load_recipe(@initial_recipe_file) if @initial_recipe_file
-      end
-
-      # add and connect the frame
-      # @param [Frame] frame frame to be added
-      # @param [Object] text text for the tab
-      def add_tab_frame(frame, text)
-        @tab_widget.addTab(frame, text)
-        connect(frame, SIGNAL(:recipe_updated), self, SLOT(:recipe_updated))
-        show_connect(frame)
-        connect(frame, SIGNAL('set_tab (int)'), @tab_widget, SLOT('setCurrentIndex (int)'))
-        console_connect(frame)
-      end
-
-      # action when tab changes
-      # @param [Integer] int no of the tab
-      def tab_changed(int)
-        @tab_widget.widget(int).build_panel
-        recipe_updated
-      end
-
-      # recipe does not need to ba saved
-      def recipe_saved
-        @yaml = @recipe.to_yaml
-        @need_saving = false
-      end
-
-      # update the shown sample and do bookkeeping
-      def recipe_updated
-        new_yaml = @recipe.to_yaml
-        return if new_yaml == @yaml
-        @need_saving = true
-        @yaml = new_yaml
-        table = @recipe.table_for_report
-        show_sample(table)
-      end
-
-      # show a random sample of the table
-      # @param [Table] table table to be shown
-      def show_sample(table)
-        table_size = table.size
-        if table_size == 0
-          @head_label.text = '<b>Maquette vide</b>'
-        else
-          @head_label.text = "<b>Taille de la maquette : #{table_size} lignes."
-        end
-        sample = '<h3>Echantillon de la maquette</h3>' + table.sample_for_html(SAMPLE_SIZE)
-        show_html(sample)
+      def connect_signals
+        show_connect(@audit_frame)
+        console_connect(@audit_frame)
+        show_connect(@mailing_frame)
+        console_connect(@mailing_frame)
       end
 
       # send the message to the console (overrides)

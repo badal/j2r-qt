@@ -35,6 +35,7 @@ module JacintheReports
 
       slots :build_output_list, :save_list, :show_list
 
+      # source must answer  source.tiers_list
       def initialize(source)
         extend Enabling if defined?(ReporterMain)
         super('Routage')
