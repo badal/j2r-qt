@@ -13,32 +13,34 @@ module JacintheReports
       slots :build_list
       signals :list_changed
 
-      SELECTIONS = ['Un', 'Deux']
-
       attr_accessor :selector
 
       def initialize
-        extend Enabling if defined?(ReporterMain)
+
+        @all_selectors = Selector.all
         super('Sélection')
+
         set_color(YELLOW)
         build_top
         @layout.add_widget(HLine.new)
         build_bottom
         @layout.insertSpacing(8, 15)
-         @layout.addStretch
-      #  enable_choices(false)
+        @layout.addStretch
+        #  enable_choices(false)
       end
 
+      CHOOSE = ['Choisir']
+
       def build_top
-        @criterion = selection_widget('Critère', SELECTIONS)
+        names = @all_selectors.map(&:name)
+        @criterion = selection_widget('Critère', CHOOSE + names)
         @parameter_one = selection_widget('Paramètre 1', [])
         @parameter_two = selection_widget('Paramètre 2', [])
         # @state = selection_widget('Etat', ETATS)
         # @zone = selection_widget('Zone', ZONES)
         connect(@criterion, SIGNAL_ACTIVATED) { choice_made }
-        connect(@parameter_one, SIGNAL_ACTIVATED) { parameter_fixed(1)}
-        connect(@parameter_two, SIGNAL_ACTIVATED) { parameter_fixed(2)}
-
+        connect(@parameter_one, SIGNAL_ACTIVATED) { parameter_fixed(1) }
+        connect(@parameter_two, SIGNAL_ACTIVATED) { parameter_fixed(2) }
       end
 
       def build_bottom
@@ -48,15 +50,15 @@ module JacintheReports
       end
 
       def choice_made
-        texte = @criterion.current_text
-        show_html(texte)
-       case texte
-       when 'Un'
-         list = ['2', 'trois']
-         @parameter_one.build_with_list(['Choisir'] + list)
-       when 'Deux'
-         @parameter_one.build_with_list([])
-       end
+        @selector = @all_selectors[@criterion.current_index - 1]
+        show_html(@selector.text)
+        show_parameters
+      end
+
+      def show_parameters
+        parameters = @selector.parameter_list
+        return if parameters.empty?
+        @parameter_one.build_with_list(CHOOSE + parameters)
       end
 
       def parameter_fixed(indx)
@@ -67,20 +69,40 @@ module JacintheReports
         @layout.add_widget(Qt::Label.new(label))
         combo = PrettyCombo.new(20)
         combo.enabled = true
-     #    combo.editable = false
+        combo.editable = false
         combo.addItems(items)
         @layout.add_widget(combo)
         combo
       end
 
       def build_list
-        @selector = Object.new
-        def @selector.tiers_list
-          [15]
-        end
+        return unless check_criterion
+        return unless check_parameter
+        size = @selector.build_tiers_list
+        msg = size ? "Liste crée, #{size} tiers" : 'Pas de liste créée'
+        console_message(msg)
         emit(list_changed)
-         puts "OK"
       end
+
+      def check_criterion
+        if @selector
+          true
+        else
+          console_message('Choisir un critère')
+          false
+        end
+      end
+
+      def check_parameter
+        count = @parameter_one.count
+        if count == 0 || @parameter_one.current_index > 0
+          true
+        else
+          console_message('Choisir un paramètre')
+          false
+        end
+      end
+
     end
   end
 end

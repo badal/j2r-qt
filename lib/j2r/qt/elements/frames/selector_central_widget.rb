@@ -28,11 +28,13 @@ module JacintheReports
         layout.addLayout(horizontal)
         @selection_frame = SelectionFrame.new
         horizontal.add_widget(@selection_frame)
-        list_tool = Object.new
-        def list_tool.tiers_list
-          (1..10).to_a
+
+        dummy = Object.new
+        def dummy.tiers_list
+          nil
         end
-        @mailing_frame = MailingFrame.new(list_tool)
+
+        @mailing_frame = MailingFrame.new(dummy)
         horizontal.add_widget(@mailing_frame)
         horizontal.addStretch
         @show_zone = Qt::TextEdit.new(Qt::Frame.new)
@@ -46,9 +48,11 @@ module JacintheReports
         console_connect(@selection_frame)
         show_connect(@mailing_frame)
         console_connect(@mailing_frame)
-        connect(@selection_frame, SIGNAL(:list_changed)) do
-          @mailing_frame.source = @selection_frame.selector
-         end
+        connect(@selection_frame, SIGNAL(:list_changed)) { papa }
+      end
+
+      def papa
+        @mailing_frame.source = @selection_frame.selector
       end
 
       # send the message to the console (overrides)

@@ -7,6 +7,8 @@
 # (c) Michel Demazure <michel@demazure.com>
 
 require 'Qt'
+
+require_relative 'selector.rb'
 require_relative 'selector_elements.rb'
 
 module JacintheReports
