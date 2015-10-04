@@ -15,6 +15,11 @@ module JacintheReports
       slots 'console_message (const QString&)', 'show_html (const QString&)'
       signals 'status_message (const QString&)'
 
+      DUMMY = Object.new
+      def DUMMY.tiers_list
+        nil
+      end
+
       # @return [SelectorCentralWidget] new instance
       def initialize
         super()
@@ -29,12 +34,9 @@ module JacintheReports
         @selection_frame = SelectionFrame.new
         horizontal.add_widget(@selection_frame)
 
-        dummy = Object.new
-        def dummy.tiers_list
-          nil
-        end
 
-        @mailing_frame = MailingFrame.new(dummy)
+
+        @mailing_frame = MailingFrame.new(DUMMY)
         horizontal.add_widget(@mailing_frame)
         horizontal.addStretch
         @show_zone = Qt::TextEdit.new(Qt::Frame.new)
@@ -48,10 +50,10 @@ module JacintheReports
         console_connect(@selection_frame)
         show_connect(@mailing_frame)
         console_connect(@mailing_frame)
-        connect(@selection_frame, SIGNAL(:list_changed)) { papa }
+        connect(@selection_frame, SIGNAL(:list_changed)) { list_changed }
       end
 
-      def papa
+      def list_changed
         @mailing_frame.source = @selection_frame.selector
       end
 

@@ -18,18 +18,22 @@ module JacintheReports
       @all << new(*args)
     end
 
-    attr_reader :name, :text, :parameter_list, :tiers_list
-    def initialize(name, text, parameter_list = [])
+    attr_reader :name, :description, :parameter_list
+    def initialize(name, description, parameter_list = [])
       @name = name
-      @text = text
+      @description = description
       @parameter_list = parameter_list
-      @tiers_list = nil
     end
 
-    def build_tiers_list
-
+    # indx = numéro du paramètre, ou bien -2
+    def build_tiers_list(indx)
+      puts @parameter_list[indx]
+      nil
     end
 
+    def command?
+      false
+    end
   end
 end
 
@@ -41,8 +45,9 @@ Selector.add('essai2', 'texte deux')
 sel = Selector.all[0]
 
 
-def sel.build_tiers_list
-  @tiers_list = [14, 15]
-  17
+def sel.build_tiers_list(indx)
+  puts @parameter_list[indx]
+  @tiers_list = [14, 15, 16, 17, 383]
+  @tiers_list.size
 end
 
