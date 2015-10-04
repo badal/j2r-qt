@@ -11,12 +11,12 @@ module JacintheReports
     # selection panel
     class SelectionFrame < PrettyFrame
       slots :build_list, :execute
-      signals :list_changed
+      signals :source_changed
 
       attr_accessor :selector
 
       def initialize
-        @all_selectors = Selector.all
+        @all_selectors = Selectors.all
         super('Sélection')
         set_color(YELLOW)
         build_top
@@ -66,18 +66,22 @@ module JacintheReports
 
       def show_parameters
         parameters = @selector.parameter_list
-        if parameters.empty?
+        if parameters && ! parameters.empty?
+          @parameter.build_with_list(CHOOSE + parameters)
+          @parameter.enabled = true
+          @build_button.enabled = false
+        else
           @parameter.clear
           @parameter.enabled = false
           @build_button.enabled = true
-        else
-          @parameter.build_with_list(CHOOSE + parameters)
-          @parameter.enabled = true
         end
       end
 
       def parameter_fixed
-        show_html(@parameter.current_text)
+        indx = @parameter.current_index
+        if indx > 0
+          show_html(@selector.parameter_description(indx - 1))
+        end
         @build_button.enabled = true
       end
 
@@ -93,9 +97,9 @@ module JacintheReports
 
       def build_list
         size = @selector.build_tiers_list(@parameter.current_index - 1)
-        msg = size ? "Liste crée, #{size} tiers" : 'Pas de liste créée'
+        msg = size ? "Liste créée, #{size} tiers" : 'Pas de liste créée'
         console_message(msg)
-        emit(list_changed)
+        emit(source_changed)
         if @selector.command?
           show_html(@selector.command_message)
           @execute_button.enabled = true

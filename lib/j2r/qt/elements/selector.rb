@@ -6,48 +6,68 @@
 #
 # (c) Michel Demazure <michel@demazure.com>
 module JacintheReports
-
-  class Selector
+  module Selectors
     @all = []
 
     def self.all
       @all
     end
 
-    def self.add(*args)
-      @all << new(*args)
+    def self.<<(selector)
+      @all << selector
     end
 
-    attr_reader :name, :description, :parameter_list
-    def initialize(name, description, parameter_list = [])
-      @name = name
-      @description = description
-      @parameter_list = parameter_list
+    Selector = Struct.new(:name, :description, :parameter_list)
+
+    class Selector
+
+      attr_reader :tiers_list
+
+      # indx = numéro du paramètre, ou bien -2
+      def build_tiers_list(indx)
+        if indx < 0
+          puts "no parameter"
+        else
+          puts parameter_list[indx]
+        end
+      end
+
+      # default
+      def command?
+        false
+      end
     end
 
-    # indx = numéro du paramètre, ou bien -2
-    def build_tiers_list(indx)
-      puts @parameter_list[indx]
-      nil
+    class SimpleQuery < Selector
+
+      def initialize(name, description, query, parameters = [])
+        super(name, description, parameters)
+        @query = query
+      end
+
     end
 
-    def command?
-      false
-    end
   end
 end
 
+
 include JacintheReports
 
-Selector.add('essai', 'texte essai', ['2014', '2015'])
-Selector.add('essai2', 'texte deux')
 
-sel = Selector.all[0]
+sel = Selectors::Selector.new('essai', 'texte essai', ['2014', '2015'])
 
+p sel
 
 def sel.build_tiers_list(indx)
-  puts @parameter_list[indx]
   @tiers_list = [14, 15, 16, 17, 383]
   @tiers_list.size
 end
+
+def sel.parameter_description(indx)
+  "vous avez choisi le paramètre #{parameter_list[indx]}"
+end
+
+Selectors<<(sel)
+
+Selectors<<(Selectors::Selector.new('essai deux', 'texte deux'))
 

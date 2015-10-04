@@ -34,8 +34,6 @@ module JacintheReports
         @selection_frame = SelectionFrame.new
         horizontal.add_widget(@selection_frame)
 
-
-
         @mailing_frame = MailingFrame.new(DUMMY)
         horizontal.add_widget(@mailing_frame)
         horizontal.addStretch
@@ -50,10 +48,10 @@ module JacintheReports
         console_connect(@selection_frame)
         show_connect(@mailing_frame)
         console_connect(@mailing_frame)
-        connect(@selection_frame, SIGNAL(:list_changed)) { list_changed }
+        connect(@selection_frame, SIGNAL(:source_changed)) { source_changed }
       end
 
-      def list_changed
+      def source_changed
         @mailing_frame.source = @selection_frame.selector
       end
 
