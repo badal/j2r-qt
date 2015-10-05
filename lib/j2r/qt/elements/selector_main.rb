@@ -8,7 +8,7 @@
 
 require 'Qt'
 
-require_relative 'selector.rb'
+require_relative 'selectors.rb'
 require_relative 'selector_elements.rb'
 
 module JacintheReports

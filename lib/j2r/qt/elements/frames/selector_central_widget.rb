@@ -64,7 +64,15 @@ module JacintheReports
       # send the text to the show area (overrides)
       # @param [String] html text to show
       def show_html(html)
-        @show_zone.setHtml(html.force_encoding('utf-8'))
+        @html = html
+        @show_zone.setHtml(@html.force_encoding('utf-8'))
+      end
+
+      # send the text to the show area (append)
+      # @param [String] html text to append
+      def append_html(html)
+        @html = @html + '<P>' + html
+        @show_zone.setHtml(@html.force_encoding('utf-8'))
       end
     end
   end

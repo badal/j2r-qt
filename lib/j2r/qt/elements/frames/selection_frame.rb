@@ -59,7 +59,7 @@ module JacintheReports
           disable_all
         else
           @selector = @all_selectors[indx - 1]
-          show_html(@selector.description)
+          init_html(@selector.description)
           show_parameters
         end
       end
@@ -80,7 +80,7 @@ module JacintheReports
       def parameter_fixed
         indx = @parameter.current_index
         if indx > 0
-          show_html(@selector.parameter_description(indx - 1))
+          append_html(@selector.parameter_description(indx - 1))
         end
         @build_button.enabled = true
       end
@@ -98,17 +98,34 @@ module JacintheReports
       def build_list
         size = @selector.build_tiers_list(@parameter.current_index - 1)
         msg = size ? "Liste créée, #{size} tiers" : 'Pas de liste créée'
-        console_message(msg)
+        append_html(msg)
         emit(source_changed)
         if @selector.command?
-          show_html(@selector.command_message)
           @execute_button.enabled = true
+          append_html(@selector.command_message)
+        else
+          append_html('Vous pouvez router')
         end
+      end
+
+      # send the text to the show area (overrides)
+      # @param [String] html text to show
+      def init_html(html)
+        @html = html
+        show_html(html)
+      end
+
+      # send the text to the show area (append)
+      # @param [String] html text to append
+      def append_html(html)
+        @html = @html + '<P>' + html
+        show_html(@html)
       end
 
       def execute
         # TODO: add return message
-        @selector.execute
+        ret = @selector.execute
+        append_html(ret)
       end
 
       # FIXME: useless
