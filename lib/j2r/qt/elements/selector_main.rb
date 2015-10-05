@@ -8,6 +8,7 @@
 
 require 'Qt'
 
+# TODO: change for Selectors gem
 require_relative 'selectors.rb'
 require_relative 'selector_elements.rb'
 
@@ -15,14 +16,16 @@ module JacintheReports
   module GuiQt
     # main selector window
     class SelectorMain < JacintheMain
-      ABOUT = ['Sélecteur pour Jacinthe', "Version #{J2R::NAME}", 'S.M.F. 2013',
+      ABOUT = ['Sélecteur pour Jacinthe', "Version #{J2R::NAME}",
+               # TODO: ajouter version Selectors
+               'S.M.F. 2013',
                COPYRIGHT]
 
       # @return [SelectorMain] new instance
       def initialize(*args)
         super()
         add_central_widget(SelectorCentralWidget.new)
-       # resize(400, 550)
+        # resize(400, 550)
         self.window_title = "Sélecteur pour #{J2R::NAME}"
         window.window_icon = Icons.from_file('Board-11-Flowers-icon.png')
       end

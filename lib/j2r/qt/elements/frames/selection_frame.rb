@@ -10,13 +10,13 @@ module JacintheReports
   module GuiQt
     # selection panel
     class SelectionFrame < PrettyFrame
-      slots :build_list, :execute
+      slots :build_list, :show_list, :execute
       signals :source_changed
 
       attr_accessor :selector
 
       def initialize
-        @all_selectors = Selectors.all
+        @all_selectors = JacintheManagement::Selectors.all
         super('Sélection')
         set_color(YELLOW)
         build_top
@@ -41,13 +41,16 @@ module JacintheReports
         @build_button = Qt::PushButton.new('Créer la sélection')
         @layout.add_widget(@build_button)
         connect_button(@build_button, :build_list)
+        @show_button = Qt::PushButton.new('Voir la sélection')
+        @layout.add_widget(@show_button)
+        connect_button(@show_button, :show_list)
         @execute_button = Qt::PushButton.new('Exécuter')
         @layout.add_widget(@execute_button)
         connect_button(@execute_button, :execute)
       end
 
       def disable_all
-        [@parameter, @build_button, @execute_button].each do |item|
+        [@parameter, @build_button, @show_button, @execute_button].each do |item|
           item.enabled = false
         end
       end
@@ -66,10 +69,11 @@ module JacintheReports
 
       def show_parameters
         parameters = @selector.parameter_list
-        if parameters && ! parameters.empty?
+        if parameters && !parameters.empty?
           @parameter.build_with_list(CHOOSE + parameters)
           @parameter.enabled = true
           @build_button.enabled = false
+          @show_button.enabled = false
         else
           @parameter.clear
           @parameter.enabled = false
@@ -99,6 +103,7 @@ module JacintheReports
         size = @selector.build_tiers_list(@parameter.current_index - 1)
         msg = size ? "Liste créée, #{size} tiers" : 'Pas de liste créée'
         append_html(msg)
+        @show_button.enabled = true
         emit(source_changed)
         if @selector.command?
           @execute_button.enabled = true
@@ -120,6 +125,13 @@ module JacintheReports
       def append_html(html)
         @html = @html + '<P>' + html
         show_html(@html)
+      end
+
+      def show_list
+        coding = J2R.system_csv_encoding
+        content = @selector.tiers_list.map { |line| line.chomp.gsub("\t", J2R::CSV_SEPARATOR) }
+        path = J2R.to_temp_file('.csv', content, coding)
+        J2R.open_file_command(path)
       end
 
       def execute
