@@ -22,7 +22,7 @@ module JacintheReports
                COPYRIGHT]
 
       # @return [SelectorMain] new instance
-      def initialize(*args)
+      def initialize(*_args)
         super()
         add_central_widget(SelectorCentralWidget.new)
         # resize(400, 550)

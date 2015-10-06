@@ -29,6 +29,14 @@ namespace :metrics do
     puts `wc metrics/rubocop_test.txt`
   end
 
+  desc 'Rubocop fix'
+  task :rubocop_fix do
+    system 'rubocop -a lib/**/*.rb > metrics\rubocop_lib.txt'
+    system 'rubocop -a spec/**/*.rb > metrics\rubocop_spec.txt'
+    puts `wc metrics/rubocop_lib.txt`
+    puts `wc metrics/rubocop_spec.txt`
+  end
+
   desc 'churn'
   task :churn do
     system 'churn > metrics\churn.txt'

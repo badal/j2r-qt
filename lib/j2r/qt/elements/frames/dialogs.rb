@@ -43,8 +43,8 @@ module JacintheReports
       def self.ask_save_file(parent, filename)
         extension = "*#{File.extname(filename)}"
         Qt::FileDialog.getSaveFileName(
-            parent.parentWidget, 'Enregistrer le fichier ?',
-            filename, extension)
+          parent.parentWidget, 'Enregistrer le fichier ?',
+          filename, extension)
       end
     end
   end

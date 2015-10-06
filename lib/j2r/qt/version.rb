@@ -21,8 +21,4 @@ module JacintheReports
   NAME = "Jacinthe violette #{VERSION}"
 end
 
-if __FILE__ == $PROGRAM_NAME
-
-  puts JacintheReports::NAME
-
-end
+puts JacintheReports::NAME if __FILE__ == $PROGRAM_NAME

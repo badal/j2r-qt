@@ -13,7 +13,8 @@ class Array
   # @return [Array] array with the values swapped
   def swap(indx_a, indx_b)
     arr = dup
-    arr[indx_a], arr[indx_b] = self[indx_b], self[indx_a]
+    arr[indx_a] = self[indx_b]
+    arr[indx_b] = self[indx_a]
     arr
   end
 

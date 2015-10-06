@@ -53,8 +53,8 @@ module JacintheReports
         horizontal.addLayout(@below_center)
         horizontal.add_widget(VLine.new)
         button = Qt::PushButton.new(
-            Icons.icon('standardbutton-save'),
-            'Enregistrer les modifications dans la maquette')
+          Icons.icon('standardbutton-save'),
+          'Enregistrer les modifications dans la maquette')
         horizontal.addStretch
         horizontal.add_widget(button)
         horizontal.addStretch

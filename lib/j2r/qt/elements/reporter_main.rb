@@ -30,7 +30,7 @@ module JacintheReports
       # WARNING needs camelCase form !!!
       # noinspection RubyInstanceMethodNamingConvention
       def closeEvent(event) # rubocop:disable MethodName
-        if  !central_widget.need_saving || Dialog.confirm(QUIT_MSG.join("\n"))
+        if !central_widget.need_saving || Dialog.confirm(QUIT_MSG.join("\n"))
           event.accept
         else
           event.ignore

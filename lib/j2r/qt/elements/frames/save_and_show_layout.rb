@@ -36,8 +36,6 @@ module JacintheReports
           Qt::BoxLayout::LeftToRight
         when :vertical
           Qt::BoxLayout::TopToBottom
-        else
-          nil
         end
       end
 

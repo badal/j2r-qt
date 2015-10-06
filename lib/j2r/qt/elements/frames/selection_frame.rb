@@ -21,8 +21,9 @@ module JacintheReports
         set_color(YELLOW)
         build_top
         @layout.add_widget(HLine.new)
+        build_center
+        @layout.add_widget(HLine.new)
         build_bottom
-        @layout.insertSpacing(8, 15)
         @layout.addStretch
         disable_all
       end
@@ -37,14 +38,17 @@ module JacintheReports
         connect(@parameter, SIGNAL_ACTIVATED) { parameter_fixed }
       end
 
-      def build_bottom
+      def build_center
         @build_button = Qt::PushButton.new('Créer la sélection')
         @layout.add_widget(@build_button)
         connect_button(@build_button, :build_list)
         @show_button = Qt::PushButton.new('Voir la sélection')
         @layout.add_widget(@show_button)
         connect_button(@show_button, :show_list)
-        @execute_button = Qt::PushButton.new('Exécuter')
+      end
+
+      def build_bottom
+        @execute_button = Qt::PushButton.new("Exécuter")
         @layout.add_widget(@execute_button)
         connect_button(@execute_button, :execute)
       end
@@ -83,9 +87,7 @@ module JacintheReports
 
       def parameter_fixed
         indx = @parameter.current_index
-        if indx > 0
-          append_html(@selector.parameter_description(indx - 1))
-        end
+        append_html(@selector.parameter_description(indx - 1)) if indx > 0
         @build_button.enabled = true
       end
 
@@ -107,6 +109,8 @@ module JacintheReports
         emit(source_changed)
         if @selector.command?
           @execute_button.enabled = true
+          # TODO: here set text depending on command ????
+          # @execute_button.set_text('texte param')
           append_html(@selector.command_message)
         else
           append_html('Vous pouvez router')
@@ -129,7 +133,7 @@ module JacintheReports
 
       def show_list
         coding = J2R.system_csv_encoding
-        content = @selector.tiers_list.map { |line| line.chomp.gsub("\t", J2R::CSV_SEPARATOR) }
+        content = @selector.tiers_list.map { |line| line.to_s.chomp.gsub("\t", J2R::CSV_SEPARATOR) }
         path = J2R.to_temp_file('.csv', content, coding)
         J2R.open_file_command(path)
       end
