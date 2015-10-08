@@ -6,9 +6,6 @@
 #
 # (c) Michel Demazure <michel@demazure.com>
 
-# TODO: fix this call
-require 'jacman/utils'
-
 module JacintheManagement
   module Selectors
     @all = []
@@ -26,19 +23,34 @@ module JacintheManagement
     class Selector
       attr_reader :tiers_list
       # default
+
+      def self.query_from_file(filename)
+        JacintheManagement::SQLFiles.script(filename)
+      end
+
+      def parameter_text
+        nil
+      end
+
+      def presentation
+        "#{description}<hr>#{parameter_text}"
+      end
+
+
+      def parameter_description(indx)
+        "vous avez choisi le paramètre #{parameter_list[indx]}"
+      end
     end
 
     class SimpleQuery < Selector
       def initialize(name, description, query, parameter_list = [])
         super(name, description, parameter_list)
         # TODO; fix module
-        @query = query.gsub(/\n/m, ' ').gsub(/\s+/, ' ')
+        @query = SQLFiles.clean(query)
       end
 
-      #    JacintheManagement::SQLFiles.script(query_file)
-
-      def command?
-        false
+      def command_name
+        nil
       end
 
       def query_for(indx)
@@ -57,17 +69,27 @@ module JacintheManagement
       end
     end
 
+    class QueryFromFile < SimpleQuery
+      def initialize(name, description, file_name, parameter_list = [])
+        query = Selector.query_from_file(file_name)
+        super(name, description, query, parameter_list)
+      end
+    end
+
     class Command < Selector
-      def initialize(name, description, parameters = [])
-        super(name, description, parameters)
+      def initialize(name, description, parameter_list = [])
+        super(name, description, parameter_list)
       end
 
-      def command?
-        true
+      def command_name
+        'Nom spécifique'
       end
 
       def command_message
-        'TO BE OVERRIDDEN'
+        ['Vous pouvez aussi bien<ul><li>router</li>',
+         "<li>lancer la commande par le bouton '#{command_name}'</li>",
+        '<li> lancer la commande, puis router</li>',
+         '<li>router, puis lancer la commande</li></ul><hr>'].join
       end
 
       def build_tiers_list(_indx)
@@ -117,34 +139,35 @@ WHERE
   annee=PARAM
   AND adhesion_locale_annee=PARAM"
 
-text2 = "Toutes les adhésions nouvelles d'une année<P>Choisir l'année"
+text2 = "Toutes les adhésions nouvelles d'une année."
 
 sel2 = Selectors::SimpleQuery.new('Adhésions nouvelles', text2, query2, %w(2014 2015))
 
-def sel2.parameter_description(indx)
-  "vous avez choisi le paramètre #{parameter_list[indx]}"
+def sel2.parameter_text
+  'Choisir l\'année'
 end
 
 Selectors << sel2
 
-sel3 = Selectors::Command.new('Commande simulée', 'Démo pour l\'ergonomie')
+sel3 = Selectors::Command.new('Commande simulée', 'Démo pour l\'ergonomie', %w(A B))
 
 def sel3.build_tiers_list(_indx)
   @tiers_list = [14, 15, 16, 17, 383]
   @tiers_list.size
 end
 
-def sel3.command_message
-  'Vous pouvez lancer la commande par le bouton Exécuter avant ou après avoir créé le routage, ou encore ou ne pas la lancer'
+def sel3.command_name
+  'Marquer les cadeaux'
 end
 
 def sel3.execute
-  'Exécution simulée'
-end
-
-def sel3.build_tiers_list(_indx)
-  @tiers_list = [14, 15, 16, 17, 383]
-  @tiers_list.size
+  'Cadeaux marqués'
 end
 
 Selectors << sel3
+
+__END__
+
+sel4 = Selectors::QueryFromFile.new('File', 'essai', 'nouvelles_adhesions_gratuites', %w(2014 2015))
+
+Selectors<<sel4

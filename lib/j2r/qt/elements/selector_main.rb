@@ -7,9 +7,6 @@
 # (c) Michel Demazure <michel@demazure.com>
 
 require 'Qt'
-
-# TODO: change for Selectors gem
-require_relative 'selectors.rb'
 require_relative 'selector_elements.rb'
 
 module JacintheReports
@@ -25,7 +22,7 @@ module JacintheReports
       def initialize(*_args)
         super()
         add_central_widget(SelectorCentralWidget.new)
-        # resize(400, 550)
+        # resize(400, 600)
         self.window_title = "Sélecteur pour #{J2R::NAME}"
         window.window_icon = Icons.from_file('Board-11-Flowers-icon.png')
       end

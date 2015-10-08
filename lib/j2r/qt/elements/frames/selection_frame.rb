@@ -66,7 +66,7 @@ module JacintheReports
           disable_all
         else
           @selector = @all_selectors[indx - 1]
-          init_html(@selector.description)
+          init_html(@selector.description + '<hr>')
           show_parameters
         end
       end
@@ -76,19 +76,37 @@ module JacintheReports
         if parameters && !parameters.empty?
           @parameter.build_with_list(CHOOSE + parameters)
           @parameter.enabled = true
-          @build_button.enabled = false
-          @show_button.enabled = false
+          ask_parameter
         else
           @parameter.clear
           @parameter.enabled = false
-          @build_button.enabled = true
+          ask_build
         end
       end
 
       def parameter_fixed
         indx = @parameter.current_index
-        append_html(@selector.parameter_description(indx - 1)) if indx > 0
+        if indx <= 0
+          ask_parameter
+          return
+        else
+          append_html(@selector.parameter_description(indx - 1))
+          ask_build
+        end
+      end
+
+      def ask_parameter
+        @build_button.enabled = false
+        @show_button.enabled = false
+        @execute_button.enabled =false
+        append_html('Choisissez la valeur du paramètre')
+      end
+
+      def ask_build
         @build_button.enabled = true
+        @show_button.enabled = false
+        @execute_button.enabled = false
+        append_html('Vous pouvez créer la sélection')
       end
 
       def selection_widget(label, items)
@@ -103,16 +121,21 @@ module JacintheReports
 
       def build_list
         size = @selector.build_tiers_list(@parameter.current_index - 1)
-        msg = size ? "Liste créée, #{size} tiers" : 'Pas de liste créée'
-        append_html(msg)
+        msg = (size ? "Liste créée, #{size} tiers" : 'Pas de liste créée')
+        init_html("<hr><b>#{msg}</b>")
         @show_button.enabled = true
         emit(source_changed)
-        if @selector.command?
+        ask_route
+      end
+
+      def ask_route
+        cmd = @selector.command_name
+        if cmd
           @execute_button.enabled = true
-          # TODO: here set text depending on command ????
-          # @execute_button.set_text('texte param')
+          @execute_button.set_text(cmd)
           append_html(@selector.command_message)
         else
+          @execute_button.enabled = false
           append_html('Vous pouvez router')
         end
       end
@@ -127,7 +150,8 @@ module JacintheReports
       # send the text to the show area (append)
       # @param [String] html text to append
       def append_html(html)
-        @html = @html + '<P>' + html
+        @html += '<br>' + html
+        @html.gsub!(/<br><hr>|<hr><br>/, '<hr>')
         show_html(@html)
       end
 
@@ -141,7 +165,7 @@ module JacintheReports
       def execute
         # TODO: add return message
         ret = @selector.execute
-        append_html(ret)
+        append_html("<b>#{ret}</b>")
       end
 
       # FIXME: useless
