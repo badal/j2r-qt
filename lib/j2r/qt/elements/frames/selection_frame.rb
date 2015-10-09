@@ -74,7 +74,7 @@ module JacintheReports
       def show_parameters
         parameters = @selector.parameter_list
         if parameters && !parameters.empty?
-          @parameter.build_with_list(CHOOSE + parameters)
+          @parameter.build_with_list(CHOOSE + parameters.map(&:to_s))
           @parameter.enabled = true
           ask_parameter
         else
