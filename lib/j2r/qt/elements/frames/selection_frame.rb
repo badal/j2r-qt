@@ -33,8 +33,10 @@ module JacintheReports
       def build_top
         names = @all_selectors.map(&:name)
         @criterion = selection_widget('Critère', CHOOSE + names)
+        @years = selection_widget('Année', [])
         @parameter = selection_widget('Paramètre', [])
         connect(@criterion, SIGNAL_ACTIVATED) { choice_made }
+        connect(@years, SIGNAL_ACTIVATED) { year_fixed }
         connect(@parameter, SIGNAL_ACTIVATED) { parameter_fixed }
       end
 
@@ -54,7 +56,7 @@ module JacintheReports
       end
 
       def disable_all
-        [@parameter, @build_button, @show_button, @execute_button].each do |item|
+        [@parameter, @years, @build_button, @show_button, @execute_button].each do |item|
           item.enabled = false
         end
       end
@@ -67,7 +69,19 @@ module JacintheReports
         else
           @selector = @all_selectors[indx - 1]
           init_html(@selector.description + '<hr>')
+          show_years
           show_parameters
+        end
+      end
+
+      def show_years
+        years = @selector.years
+        if years
+          @years.enabled = true
+          @years.build_with_list(years)
+        else
+          @years.enabled = false
+          @years.clear
         end
       end
 
@@ -80,8 +94,13 @@ module JacintheReports
         else
           @parameter.clear
           @parameter.enabled = false
+         # append_html('Choisissez l\'année') if @selector.years
           ask_build
         end
+      end
+
+      def year_fixed
+        ask_build if !@selector.parameter_list || @parameter.current_index > 0
       end
 
       def parameter_fixed
@@ -90,8 +109,15 @@ module JacintheReports
           ask_parameter
           return
         else
-          append_html(@selector.parameter_description(indx - 1))
           ask_build
+        end
+      end
+
+      def choice_text
+        if @selector.years
+          'Choisissez l\'année et la valeur du paramètre'
+        else
+          'Choisissez la valeur du paramètre'
         end
       end
 
@@ -99,14 +125,16 @@ module JacintheReports
         @build_button.enabled = false
         @show_button.enabled = false
         @execute_button.enabled =false
-        append_html('Choisissez la valeur du paramètre')
+        append_html(choice_text)
       end
 
       def ask_build
+        indx = @parameter.current_index - 1
+        year = @years.current_index
+        append_html(@selector.creation_message(indx, year))
         @build_button.enabled = true
         @show_button.enabled = false
         @execute_button.enabled = false
-        append_html('Vous pouvez créer la sélection')
       end
 
       def selection_widget(label, items)
@@ -120,7 +148,8 @@ module JacintheReports
       end
 
       def build_list
-        size = @selector.build_tiers_list(@parameter.current_index - 1)
+        year = @years.current_text
+        size = @selector.build_tiers_list(@parameter.current_index - 1, year)
         msg = (size ? "Liste créée, #{size} tiers" : 'Pas de liste créée')
         init_html("<hr><b>#{msg}</b>")
         @show_button.enabled = true
@@ -136,7 +165,7 @@ module JacintheReports
           append_html(@selector.command_message)
         else
           @execute_button.enabled = false
-          append_html('Vous pouvez router')
+          append_html('Vous pouvez voir et/ou router')
         end
       end
 

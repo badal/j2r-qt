@@ -8,9 +8,6 @@
 
 require_relative 'version.rb'
 
-# TODO: change for Selectors gem
-# require_relative 'elements/selectors.rb'
-
 J2R.for_user do
   J2R.logger.info('start selector')
   require_relative('elements/selector_main.rb')
