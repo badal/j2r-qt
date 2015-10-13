@@ -68,17 +68,17 @@ module JacintheReports
           disable_all
         else
           @selector = @all_selectors[indx - 1]
-          init_html(@selector.description + '<hr>')
+          init_html(@selector.description.to_s + '<hr>')
           show_years
           show_parameters
         end
       end
 
       def show_years
-        years = @selector.years
+        years = @selector.year_choice
         if years
           @years.enabled = true
-          @years.build_with_list(years)
+          @years.build_with_list(years.map(&:to_s))
         else
           @years.enabled = false
           @years.clear
@@ -94,9 +94,12 @@ module JacintheReports
         else
           @parameter.clear
           @parameter.enabled = false
-         # append_html('Choisissez l\'année') if @selector.years
           ask_build
         end
+      end
+
+      def values
+        [@parameter.current_index - 1, @years.current_text]
       end
 
       def year_fixed
@@ -114,7 +117,7 @@ module JacintheReports
       end
 
       def choice_text
-        if @selector.years
+        if @years.enabled
           'Choisissez l\'année et la valeur du paramètre'
         else
           'Choisissez la valeur du paramètre'
@@ -129,9 +132,7 @@ module JacintheReports
       end
 
       def ask_build
-        indx = @parameter.current_index - 1
-        year = @years.current_index
-        append_html(@selector.creation_message(indx, year))
+        append_html(@selector.creation_message(values))
         @build_button.enabled = true
         @show_button.enabled = false
         @execute_button.enabled = false
@@ -147,9 +148,9 @@ module JacintheReports
         combo
       end
 
+
       def build_list
-        year = @years.current_text
-        size = @selector.build_tiers_list(@parameter.current_index - 1, year)
+        size = @selector.build_tiers_list(values)
         msg = (size ? "Liste créée, #{size} tiers" : 'Pas de liste créée')
         init_html("<hr><b>#{msg}</b>")
         @show_button.enabled = true
@@ -192,8 +193,7 @@ module JacintheReports
       end
 
       def execute
-        # TODO: add return message
-        ret = @selector.execute
+        ret = @selector.execute(values)
         append_html("<b>#{ret}</b>")
       end
 
