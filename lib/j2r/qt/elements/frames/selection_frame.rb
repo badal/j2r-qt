@@ -10,7 +10,7 @@ module JacintheReports
   module GuiQt
     # selection panel
     class SelectionFrame < PrettyFrame
-      slots :build_list, :show_list, :execute
+      slots :build_list, :show_list, :save_list, :execute
       signals :source_changed
 
       attr_accessor :selector
@@ -20,7 +20,7 @@ module JacintheReports
         super('Sélection')
         set_color(YELLOW)
         build_top
-        @layout.add_widget(HLine.new)
+      #  @layout.add_widget(HLine.new)
         build_center
         @layout.add_widget(HLine.new)
         build_bottom
@@ -28,7 +28,7 @@ module JacintheReports
         disable_all
       end
 
-      CHOOSE = ['Choisir']
+      CHOOSE = ['-- Choisir --']
 
       def build_top
         names = @all_selectors.map(&:name)
@@ -47,6 +47,9 @@ module JacintheReports
         @show_button = Qt::PushButton.new('Voir la sélection')
         @layout.add_widget(@show_button)
         connect_button(@show_button, :show_list)
+        @save_button = Qt::PushButton.new('Enregistrer')
+        @layout.add_widget(@save_button)
+        connect_button(@save_button, :save_list)
       end
 
       def build_bottom
@@ -56,10 +59,21 @@ module JacintheReports
       end
 
       def disable_all
-        [@parameter, @years, @build_button, @show_button, @execute_button].each do |item|
+        [@parameter, @years, @build_button, @show_button, @save_button, @execute_button].each do |item|
           item.enabled = false
         end
       end
+
+      def selection_not_done
+        @show_button.enabled = false
+        @save_button.enabled = false
+      end
+
+      def selection_done
+        @show_button.enabled = true
+        @save_button.enabled = true
+      end
+
 
       def choice_made
         indx = @criterion.current_index
@@ -126,7 +140,7 @@ module JacintheReports
 
       def ask_parameter
         @build_button.enabled = false
-        @show_button.enabled = false
+        selection_not_done
         @execute_button.enabled =false
         append_html(choice_text)
       end
@@ -134,7 +148,7 @@ module JacintheReports
       def ask_build
         append_html(@selector.creation_message(values))
         @build_button.enabled = true
-        @show_button.enabled = false
+        selection_not_done
         @execute_button.enabled = false
       end
 
@@ -148,12 +162,11 @@ module JacintheReports
         combo
       end
 
-
       def build_list
         size = @selector.build_tiers_list(values)
         msg = (size ? "Liste créée, #{size} tiers" : 'Pas de liste créée')
         init_html("<hr><b>#{msg}</b>")
-        @show_button.enabled = true
+        selection_done
         emit(source_changed)
         ask_route
       end
@@ -166,7 +179,7 @@ module JacintheReports
           append_html(@selector.command_message)
         else
           @execute_button.enabled = false
-          append_html('Vous pouvez voir et/ou router')
+          append_html('Vous pouvez voir et/ou enregistrer et/ou router')
         end
       end
 
@@ -190,6 +203,14 @@ module JacintheReports
         content = @selector.tiers_list.map { |line| line.to_s.chomp.gsub("\t", J2R::CSV_SEPARATOR) }
         path = J2R.to_temp_file('.csv', content, coding)
         J2R.open_file_command(path)
+      end
+
+      def save_list
+        name = 'selection-' + Reports::CommonFormatters.time_stamp + '.csv'
+        filename = File.join(User.lists, name)
+        path = Dialog.ask_save_file(self, filename)
+        message = path ? J2R.to_csv_file(path, content) : 'Annulé'
+        console_message message
       end
 
       def execute

@@ -130,7 +130,7 @@ module JacintheReports
 
       def save_list
         if_content do |content|
-          name = 'routage' + Reports::CommonFormatters.time_stamp + '.csv'
+          name = 'routage-' + Reports::CommonFormatters.time_stamp + '.csv'
           filename = File.join(User.lists, name)
           path = Dialog.ask_save_file(self, filename)
           message = path ? J2R.to_csv_file(path, content) : 'Annulé'

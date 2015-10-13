@@ -14,9 +14,9 @@ module JacintheReports
     # main selector window
     class SelectorMain < JacintheMain
       ABOUT = ['Sélecteur pour Jacinthe', "Version #{J2R::NAME}",
-               # TODO: ajouter version Selectors
-               'S.M.F. 2013',
-               COPYRIGHT]
+               "version jacman-selectors #{JacintheManagement::Selectors::VERSION}",
+               'S.M.F. 2015',
+               "\u00A9 Michel Demazure"]
 
       # @return [SelectorMain] new instance
       def initialize(*_args)

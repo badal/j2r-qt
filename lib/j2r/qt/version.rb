@@ -13,7 +13,7 @@ module JacintheReports
   # minor version number
   MINOR = 4
   # tiny version number
-  TINY = '0.4'
+  TINY = '0.6'
   # version
   VERSION = [MAJOR, MINOR, TINY].join('.')
 
