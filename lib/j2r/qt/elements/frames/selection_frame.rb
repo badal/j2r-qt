@@ -20,7 +20,7 @@ module JacintheReports
         super('Sélection')
         set_color(YELLOW)
         build_top
-      #  @layout.add_widget(HLine.new)
+        #  @layout.add_widget(HLine.new)
         build_center
         @layout.add_widget(HLine.new)
         build_bottom
@@ -53,7 +53,7 @@ module JacintheReports
       end
 
       def build_bottom
-        @execute_button = Qt::PushButton.new("Exécuter")
+        @execute_button = Qt::PushButton.new('Exécuter')
         @layout.add_widget(@execute_button)
         connect_button(@execute_button, :execute)
       end
@@ -73,7 +73,6 @@ module JacintheReports
         @show_button.enabled = true
         @save_button.enabled = true
       end
-
 
       def choice_made
         indx = @criterion.current_index
@@ -141,7 +140,7 @@ module JacintheReports
       def ask_parameter
         @build_button.enabled = false
         selection_not_done
-        @execute_button.enabled =false
+        @execute_button.enabled = false
         append_html(choice_text)
       end
 
@@ -198,11 +197,20 @@ module JacintheReports
         show_html(@html)
       end
 
+      # def show_list
+      #   coding = J2R.system_csv_encoding
+      #   content = @selector.tiers_list.map { |line| line.to_s.chomp.gsub("\t", J2R::CSV_SEPARATOR) }
+      #   path = J2R.to_temp_file('.csv', content, coding)
+      #   J2R.open_file_command(path)
+      # end
+
       def show_list
-        coding = J2R.system_csv_encoding
-        content = @selector.tiers_list.map { |line| line.to_s.chomp.gsub("\t", J2R::CSV_SEPARATOR) }
-        path = J2R.to_temp_file('.csv', content, coding)
-        J2R.open_file_command(path)
+        tbl = @selector.tiers_list.map do |line|
+          line.chomp.split("\t")
+        end
+
+        table = TableEditor.new(tbl)
+        table.show
       end
 
       def save_list
