@@ -1,7 +1,7 @@
-# 00!/usr/bin/env ruby
+#!/usr/bin/env ruby
 # encoding: utf-8
 
-# File: table_editorrb
+# File: table_editor.rb
 # Created: 14/10/15
 #
 # (c) Michel Demazure <michel@demazure.com>
@@ -13,8 +13,12 @@ module JacintheReports
     class JTable < Qt::TableWidget
       slots :purge, 'sort_column(int)', :save
 
+      attr_reader :state
+
       def initialize(table, parent)
         super(parent)
+        @table = table
+        @state = :initial
         set_headers
         rows = table.size
         cols = table.first.size
@@ -22,7 +26,7 @@ module JacintheReports
         set_column_count(cols)
         fill_with(table)
         set_sizes
-    end
+      end
 
       def set_headers
         header_view = Qt::HeaderView.new(Qt::Horizontal)
@@ -40,15 +44,6 @@ module JacintheReports
           end
         end
       end
-      #
-      # def add_checkboxes(column)
-      #   @checkboxes = []
-      #   row_count.times.each do |row|
-      #     @checkboxes[row] = Qt::CheckBox.new
-      #     set_cell_widget(row, column, @checkboxes[row])
-      #   end
-      #   resizeColumnToContents(column)
-      # end
 
       def set_sizes
         w = column_count.times.reduce(50) do |acc, i|
@@ -64,7 +59,13 @@ module JacintheReports
       def purge
         selection_model = selectionModel
         list = selection_model.selected_rows.map(&:row)
-        list.reverse_each { |i| remove_row(i) }
+        return if list.empty?
+        list.reverse_each do |i|
+          @table[i] = nil
+          remove_row(i)
+        end
+        @table.compact!
+        @state = :changed
       end
 
       def sort_column(int)
@@ -72,33 +73,61 @@ module JacintheReports
       end
 
       def save
-        puts "save"
+        @state = :saved
       end
-   end
+    end
 
     class TableEditor < Qt::Widget
       include Signals
+
+      signals :back, :accept
+
+      QUIT_MSG = [
+          'La modification que vous avez faite',
+          'n\'a pas été acceptée'
+      ]
 
       def initialize(table)
         super()
         self.window_title = 'Editeur de table'
 
+        @table = table
+
         layout = Qt::VBoxLayout.new(self)
         horiz = Qt::HBoxLayout.new
         layout.add_layout(horiz)
 
-        purge_button = Qt::PushButton.new('nettoyer', self)
+        purge_button = Qt::PushButton.new('Nettoyer', self)
         horiz.add_widget(purge_button)
 
-        save_button = Qt::PushButton.new('Enregistrer', self)
+        save_button = Qt::PushButton.new('Accepter le nettoyage', self)
         horiz.add_widget(save_button)
 
-        tbl = JTable.new(table, self)
+        @tbl = JTable.new(table, self)
 
-        layout.add_widget(tbl)
+        layout.add_widget(@tbl)
 
-        connect(purge_button, SIGNAL_CLICKED, tbl, SLOT(:purge))
-        connect(save_button, SIGNAL_CLICKED, tbl, SLOT(:save))
+        connect(purge_button, SIGNAL_CLICKED, @tbl, SLOT(:purge))
+        connect(save_button, SIGNAL_CLICKED, @tbl, SLOT(:save))
+      end
+
+      # WARNING needs camelCase form !!!
+      # noinspection RubyInstanceMethodNamingConvention
+      def closeEvent(event) # rubocop:disable MethodName
+        case @tbl.state
+        when :initial
+          event.accept
+        when :saved
+          emit(accept)
+          event.accept
+        when :changed
+          if Dialog.confirm(QUIT_MSG.join("\n"))
+            emit(back)
+            event.accept
+          else
+            event.ignore
+          end
+        end
       end
     end
   end

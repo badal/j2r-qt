@@ -165,6 +165,9 @@ module JacintheReports
         size = @selector.build_tiers_list(values)
         msg = (size ? "Liste créée, #{size} tiers" : 'Pas de liste créée')
         init_html("<hr><b>#{msg}</b>")
+        @selected = @selector.tiers_list.map do |line|
+          line.chomp.split("\t")
+        end
         selection_done
         emit(source_changed)
         ask_route
@@ -205,19 +208,34 @@ module JacintheReports
       # end
 
       def show_list
-        tbl = @selector.tiers_list.map do |line|
-          line.chomp.split("\t")
-        end
+        @initial = @selected.dup
+        editor = TableEditor.new(@selected)
+        connect(editor, SIGNAL(:back)) { restore_selected}
+        connect(editor, SIGNAL(:accept)) { selected_changed }
+        editor.show
+      end
 
-        table = TableEditor.new(tbl)
-        table.show
+      def restore_selected
+        @selected = @initial
+      end
+
+      def selected_changed
+        size = @selected.size
+        msg = "Liste modifiée, #{size} tiers"
+        init_html("<hr><b>#{msg}</b>")
+      end
+
+      def tiers_list_2
+        @selected.map do |line|
+          line.join(CSV_SEPARATOR)
+        end.join("\n")
       end
 
       def save_list
         name = 'selection-' + Reports::CommonFormatters.time_stamp + '.csv'
         filename = File.join(User.lists, name)
         path = Dialog.ask_save_file(self, filename)
-        message = path ? J2R.to_csv_file(path, content) : 'Annulé'
+        message = path ? J2R.to_csv_file(path, tiers_list_2) : 'Annulé'
         console_message message
       end
 

@@ -15,6 +15,7 @@ require_relative 'frames/pretty_combo.rb'
 require_relative 'frames/mailing_frame.rb'
 require_relative 'frames/selection_frame.rb'
 require_relative 'frames/jacinthe_main.rb'
+require_relative 'frames/table_editor.rb'
 
 require_relative 'frames/selector_central_widget.rb'
-require_relative 'frames/table_editor.rb'
+
