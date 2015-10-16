@@ -108,7 +108,8 @@ module JacintheReports
 
         connect(purge_button, SIGNAL_CLICKED, @tbl, SLOT(:purge))
         connect(save_button, SIGNAL_CLICKED) do
-          @tbl.state = :saved; emit(accept)
+          @tbl.state = :saved
+          emit(accept)
         end
       end
 

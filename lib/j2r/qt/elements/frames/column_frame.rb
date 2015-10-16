@@ -84,6 +84,7 @@ module JacintheReports
         list == list.uniq ? update_recipe : @lines[indx].erase_selection
       end
 
+      # FLOG: 29.3
       def update_recipe
         @panel = @lines.map(&:selection)
         cols = @recipe.columns
