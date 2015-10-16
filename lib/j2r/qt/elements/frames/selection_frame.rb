@@ -181,7 +181,7 @@ module JacintheReports
           append_html(@selector.command_message)
         else
           @execute_button.enabled = false
-          append_html('Vous pouvez voir et/ou enregistrer et/ou router')
+          append_html('Vous pouvez voir(éditer) et/ou enregistrer et/ou router')
         end
       end
 
@@ -220,12 +220,16 @@ module JacintheReports
       end
 
       def selected_changed
-        size = @selected.size
+        size = @selected.size - 1
         msg = "Liste modifiée, #{size} tiers"
         init_html("<hr><b>#{msg}</b>")
+        @selector.tiers_list = @selected.map do |line|
+          ([line[0].to_i] + line[1..-1]).join("\t")
+        end
+        ask_route
       end
 
-      def tiers_list_2
+      def output_content
         @selected.map do |line|
           line.join(CSV_SEPARATOR)
         end.join("\n")
@@ -235,7 +239,7 @@ module JacintheReports
         name = 'selection-' + Reports::CommonFormatters.time_stamp + '.csv'
         filename = File.join(User.lists, name)
         path = Dialog.ask_save_file(self, filename)
-        message = path ? J2R.to_csv_file(path, tiers_list_2) : 'Annulé'
+        message = path ? J2R.to_csv_file(path, output_content) : 'Annulé'
         console_message message
       end
 

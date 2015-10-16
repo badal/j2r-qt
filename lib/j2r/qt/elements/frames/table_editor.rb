@@ -11,6 +11,7 @@ module JacintheReports
     # line for sort panel
 
     class JTable < Qt::TableWidget
+      MAX_SIZE = 800
       slots :purge, 'sort_column(int)', :save
 
       attr_reader :state
@@ -19,11 +20,11 @@ module JacintheReports
         super(parent)
         @table = table
         @state = :initial
-        set_headers
-        rows = table.size
+        rows = table.size - 1
         cols = table.first.size
         set_row_count(rows)
         set_column_count(cols)
+        set_headers
         fill_with(table)
         set_sizes
       end
@@ -37,10 +38,13 @@ module JacintheReports
       end
 
       def fill_with(table)
-        table.each_with_index do |line, row|
+        labels = table.first
+        first_labels = JacintheManagement::Selectors::Selector::FIRST_LABELS
+        labels[0...first_labels.size] = first_labels
+        setHorizontalHeaderLabels(labels)
+        table.drop(1).each_with_index do |line, row|
           line.each_with_index do |item, col|
-            itm = Qt::TableWidgetItem.new(item)
-            set_item(row, col, itm)
+            set_item(row, col, Qt::TableWidgetItem.new(item))
           end
         end
       end
@@ -52,8 +56,8 @@ module JacintheReports
         h = row_count.times.reduce(0) do |acc, i|
           acc + rowHeight(i)
         end
-        set_minimum_width(w < 600 ? w : 600)
-        set_minimum_height(h < 600 ? h : 600)
+        set_minimum_width(w < MAX_SIZE ? w : MAX_SIZE)
+        set_minimum_height(h < MAX_SIZE ? h : MAX_SIZE)
       end
 
       def purge
@@ -61,7 +65,7 @@ module JacintheReports
         list = selection_model.selected_rows.map(&:row)
         return if list.empty?
         list.reverse_each do |i|
-          @table[i] = nil
+          @table[i + 1] = nil
           remove_row(i)
         end
         @table.compact!
