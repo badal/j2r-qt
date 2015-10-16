@@ -8,18 +8,19 @@
 
 module JacintheReports
   module GuiQt
-    # line for sort panel
-
+    # ad-hoc editor for the selector tool
     class JTable < Qt::TableWidget
       MAX_SIZE = 800
-      slots :purge, 'sort_column(int)', :save
 
-      attr_reader :state
+      slots :purge, 'sort_column(int)', :save
+      signals :finish
+
+      attr_accessor :state
 
       def initialize(table, parent)
         super(parent)
         @table = table
-        @state = :initial
+        @state = :saved
         rows = table.size - 1
         cols = table.first.size
         set_row_count(rows)
@@ -75,10 +76,6 @@ module JacintheReports
       def sort_column(int)
         sortByColumn(int, Qt::AscendingOrder)
       end
-
-      def save
-        @state = :saved
-      end
     end
 
     class TableEditor < Qt::Widget
@@ -87,42 +84,43 @@ module JacintheReports
       signals :back, :accept
 
       QUIT_MSG = [
-          'La modification que vous avez faite',
-          'n\'a pas été acceptée'
+        'La modification que vous avez faite',
+        'n\'a pas été acceptée'
       ]
 
       def initialize(table)
         super()
-        self.window_title = 'Editeur de table'
+        self.window_title = 'Nettoyeur de table'
 
         @table = table
 
         layout = Qt::VBoxLayout.new(self)
         horiz = Qt::HBoxLayout.new
         layout.add_layout(horiz)
-
         purge_button = Qt::PushButton.new('Nettoyer', self)
         horiz.add_widget(purge_button)
 
-        save_button = Qt::PushButton.new('Accepter le nettoyage', self)
+        save_button = Qt::PushButton.new('Accepter le nettoyage et fermer', self)
         horiz.add_widget(save_button)
 
         @tbl = JTable.new(table, self)
-
         layout.add_widget(@tbl)
 
         connect(purge_button, SIGNAL_CLICKED, @tbl, SLOT(:purge))
-        connect(save_button, SIGNAL_CLICKED, @tbl, SLOT(:save))
+        connect(save_button, SIGNAL_CLICKED) do
+          @tbl.state = :saved; emit(accept)
+        end
+      end
+
+      def finish
+        emit(accept)
       end
 
       # WARNING needs camelCase form !!!
       # noinspection RubyInstanceMethodNamingConvention
       def closeEvent(event) # rubocop:disable MethodName
         case @tbl.state
-        when :initial
-          event.accept
         when :saved
-          emit(accept)
           event.accept
         when :changed
           if Dialog.confirm(QUIT_MSG.join("\n"))

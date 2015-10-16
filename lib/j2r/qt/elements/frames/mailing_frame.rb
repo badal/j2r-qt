@@ -113,7 +113,6 @@ module JacintheReports
       def output_from(mailing_list)
         pattern = @format.currentText
         processor = MAILING_PROCESSORS[pattern]
-        # FIXME: move map to save_list
         mailing_list.send(processor).map { |line| line.join(J2R::CSV_SEPARATOR) }
       end
 
@@ -142,15 +141,6 @@ module JacintheReports
       def show_list
         if_content do |content|
           coding = J2R.system_csv_encoding
-
-         # # FIXME: tempo
-         #  tbl = content.map do |line|
-         #    line.chomp.split(J2R::CSV_SEPARATOR)
-         #  end
-         #  require_relative 'table_editor.rb'
-         #  JTable.new(tbl, parent).show
-         #  return
-
           path = J2R.to_temp_file('.csv', content, coding)
           J2R.open_file_command(path)
         end

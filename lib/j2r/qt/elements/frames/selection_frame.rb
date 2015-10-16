@@ -200,19 +200,12 @@ module JacintheReports
         show_html(@html)
       end
 
-      # def show_list
-      #   coding = J2R.system_csv_encoding
-      #   content = @selector.tiers_list.map { |line| line.to_s.chomp.gsub("\t", J2R::CSV_SEPARATOR) }
-      #   path = J2R.to_temp_file('.csv', content, coding)
-      #   J2R.open_file_command(path)
-      # end
-
       def show_list
         @initial = @selected.dup
-        editor = TableEditor.new(@selected)
-        connect(editor, SIGNAL(:back)) { restore_selected}
-        connect(editor, SIGNAL(:accept)) { selected_changed }
-        editor.show
+        @editor = TableEditor.new(@selected)
+        connect(@editor, SIGNAL(:back)) { restore_selected }
+        connect(@editor, SIGNAL(:accept)) { selected_changed }
+        @editor.show
       end
 
       def restore_selected
@@ -226,6 +219,7 @@ module JacintheReports
         @selector.tiers_list = @selected.map do |line|
           ([line[0].to_i] + line[1..-1]).join("\t")
         end
+        @editor.close
         ask_route
       end
 
@@ -246,16 +240,6 @@ module JacintheReports
       def execute
         ret = @selector.execute(values)
         append_html("<b>#{ret}</b>")
-      end
-
-      # FIXME: useless
-      def check(message)
-        if yield
-          true
-        else
-          console_message(message)
-          false
-        end
       end
     end
   end

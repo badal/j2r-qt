@@ -18,4 +18,3 @@ require_relative 'frames/jacinthe_main.rb'
 require_relative 'frames/table_editor.rb'
 
 require_relative 'frames/selector_central_widget.rb'
-
