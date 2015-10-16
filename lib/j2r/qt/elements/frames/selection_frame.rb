@@ -151,15 +151,15 @@ module JacintheReports
         @execute_button.enabled = false
       end
 
-      def selection_widget(label, items)
-        @layout.add_widget(Qt::Label.new(label))
-        combo = PrettyCombo.new(20)
-        combo.enabled = true
-        #  combo.editable = false
-        combo.addItems(items)
-        @layout.add_widget(combo)
-        combo
-      end
+      # def selection_widget(label, items)
+      #   @layout.add_widget(Qt::Label.new(label))
+      #   combo = PrettyCombo.new(20)
+      #   combo.enabled = true
+      #   #  combo.editable = false
+      #   combo.addItems(items)
+      #   @layout.add_widget(combo)
+      #   combo
+      # end
 
       def build_list
         size = @selector.build_tiers_list(values)
