@@ -8,6 +8,11 @@
 
 require_relative 'version.rb'
 
+module JacintheManagement
+  SELECTOR_FILES_DIR = File.join(Core::SMF_SERVEUR, 'Jacinthe', 'Tools', 'Library', 'SelectorFiles')
+  Selectors.add_from_directory(SELECTOR_FILES_DIR, '.sel')
+end
+
 J2R.for_user do
   J2R.logger.info('start selector')
   require_relative('elements/selector_main.rb')
