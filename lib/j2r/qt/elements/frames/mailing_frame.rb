@@ -73,15 +73,6 @@ module JacintheReports
         connect_button(@show_list, :show_list)
       end
 
-      # def selection_widget(label, items)
-      #   @layout.add_widget(Qt::Label.new(label))
-      #   combo = PrettyCombo.new(20)
-      #   combo.enabled = true
-      #   combo.addItems(items)
-      #   @layout.add_widget(combo)
-      #   combo
-      # end
-
       def enable_choices(bool)
         [@save_list, @show_list, @format].each do |widget|
           widget.enabled = bool

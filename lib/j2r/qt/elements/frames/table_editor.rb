@@ -64,12 +64,13 @@ module JacintheReports
       def purge
         selection_model = selectionModel
         list = selection_model.selected_rows.map(&:row)
-        return if list.empty?
-        list.reverse_each do |i|
-          @table[i + 1] = nil
-          remove_row(i)
+        list.reverse.each do |row|
+          deleted_line = (0...column_count).to_a.map do |i|
+            item(row, i).text.force_encoding('utf-8')
+          end
+          @table.reject! { |line| line == deleted_line }
+          remove_row(row)
         end
-        @table.compact!
         @state = :changed
       end
 
@@ -84,8 +85,8 @@ module JacintheReports
       signals :back, :accept
 
       QUIT_MSG = [
-        'La modification que vous avez faite',
-        'n\'a pas été acceptée'
+          'La modification que vous avez faite',
+          'n\'a pas été acceptée'
       ]
 
       def initialize(table)
