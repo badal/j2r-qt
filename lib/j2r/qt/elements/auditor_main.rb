@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-# File: auditer_main.rb
+# File: auditor_main.rb
 # Created: 27/06/12
 #
 # (c) Michel Demazure <michel@demazure.com>
@@ -11,7 +11,7 @@ require_relative 'auditor_elements.rb'
 
 module JacintheReports
   module GuiQt
-    # main auditer window
+    # main auditor window
     class AuditorMain < JacintheMain
       ABOUT = ['Auditeur pour Jacinthe', "Version #{J2R::NAME}", 'S.M.F. 2013',
                COPYRIGHT]

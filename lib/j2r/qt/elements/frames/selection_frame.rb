@@ -92,6 +92,8 @@ module JacintheReports
         if years
           @years.enabled = true
           @years.build_with_list(years.map(&:to_s))
+          indx = years.index { |item| item[Time.now.year.to_s] }
+          @years.set_current_index(indx) if indx
         else
           @years.enabled = false
           @years.clear
@@ -153,8 +155,16 @@ module JacintheReports
 
       def build_list
         size = @selector.build_tiers_list(values)
-        msg = (size ? "Liste créée, #{size} tiers" : 'Pas de liste créée')
-        init_html("<hr><b>#{msg}</b>")
+        if size == -1
+          append_html('<b>Sélection vide.</b>')
+         else
+          msg = (size ? "Liste créée, #{size} tiers" : 'Pas de liste créée')
+          init_html("<hr><b>#{msg}</b>")
+          selection_built
+        end
+      end
+
+      def selection_built
         @selected = @selector.tiers_list.map do |line|
           line.chomp.split("\t")
         end

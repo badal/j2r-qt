@@ -13,7 +13,6 @@ module JacintheReports
       MAX_SIZE = 800
 
       slots :purge, 'sort_column(int)', :save
-      signals :finish
 
       attr_accessor :state
 
@@ -114,16 +113,12 @@ module JacintheReports
         end
       end
 
-      def finish
-        emit(accept)
-      end
-
       # WARNING needs camelCase form !!!
       # noinspection RubyInstanceMethodNamingConvention
       def closeEvent(event) # rubocop:disable MethodName
         case @tbl.state
         when :saved
-          event.accept
+          return
         when :changed
           if Dialog.confirm(QUIT_MSG.join("\n"))
             emit(back)

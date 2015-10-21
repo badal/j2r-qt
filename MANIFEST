@@ -1,8 +1,12 @@
-#!mast -x .rubocop.yml -x metrics -x doc -x bat -x help -x coverage -x pkg -x documentation v1 -x demo doc documentation v1 Gemfile Gemfile.lock help HISTORY.md lib LICENSE MANIFEST metrics metrics.rake Rakefile README.md TODO.md
+#!mast -x .rubocop.yml -x metrics -x doc -x bat -x help -x coverage -x pkg -x documentation v1 -x demo doc Gemfile Gemfile.lock HISTORY.md j2r-qt.gemspec lib LICENSE MANIFEST metrics metrics.rake Rakefile README.md TODO.md
 Gemfile
 Gemfile.lock
 HISTORY.md
+j2r-qt.gemspec
+lib/.rubocop.yml
 lib/j2r/qt/auditor_qt.rb
+lib/j2r/qt/coverage/.last_run.json
+lib/j2r/qt/coverage/.resultset.json.lock
 lib/j2r/qt/elements/auditor_elements.rb
 lib/j2r/qt/elements/auditor_main.rb
 lib/j2r/qt/elements/extensions.rb
@@ -15,7 +19,6 @@ lib/j2r/qt/elements/frames/dialogs.rb
 lib/j2r/qt/elements/frames/enabling.rb
 lib/j2r/qt/elements/frames/entry_frame.rb
 lib/j2r/qt/elements/frames/export_frame.rb
-lib/j2r/qt/elements/frames/export_layout.rb
 lib/j2r/qt/elements/frames/filter_frame.rb
 lib/j2r/qt/elements/frames/jacinthe_main.rb
 lib/j2r/qt/elements/frames/mailing_frame.rb
@@ -27,15 +30,24 @@ lib/j2r/qt/elements/frames/pretty_combo.rb
 lib/j2r/qt/elements/frames/pretty_frame.rb
 lib/j2r/qt/elements/frames/report_frame.rb
 lib/j2r/qt/elements/frames/reporter_central_widget.rb
+lib/j2r/qt/elements/frames/save_and_show_layout.rb
+lib/j2r/qt/elements/frames/selection_frame.rb
+lib/j2r/qt/elements/frames/selector_central_widget.rb
 lib/j2r/qt/elements/frames/sort_frame.rb
+lib/j2r/qt/elements/frames/table_editor.rb
 lib/j2r/qt/elements/frames/tiers_audit_frame.rb
 lib/j2r/qt/elements/icons/Board-11-Flowers-icon.png
 lib/j2r/qt/elements/icons/add2_32.png
 lib/j2r/qt/elements/icons.rb
 lib/j2r/qt/elements/reporter_elements.rb
 lib/j2r/qt/elements/reporter_main.rb
+lib/j2r/qt/elements/selector_elements.rb
+lib/j2r/qt/elements/selector_main.rb
 lib/j2r/qt/elements/signals.rb
+lib/j2r/qt/essai_reporter.rb
+lib/j2r/qt/essai_selector.rb
 lib/j2r/qt/reporter_qt.rb
+lib/j2r/qt/selector_qt.rb
 lib/j2r/qt/version.rb
 LICENSE
 MANIFEST
