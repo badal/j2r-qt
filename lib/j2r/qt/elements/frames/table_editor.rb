@@ -39,8 +39,6 @@ module JacintheReports
 
       def fill_with(table)
         labels = table.first
-        first_labels = JacintheManagement::Selectors::Selector::FIRST_LABELS
-        labels[0...first_labels.size] = first_labels
         setHorizontalHeaderLabels(labels)
         table.drop(1).each_with_index do |line, row|
           line.each_with_index do |item, col|
@@ -63,7 +61,7 @@ module JacintheReports
       def purge
         selection_model = selectionModel
         list = selection_model.selected_rows.map(&:row)
-        list.reverse.each do |row|
+        list.reverse_each do |row|
           deleted_line = (0...column_count).to_a.map do |i|
             item(row, i).text.force_encoding('utf-8')
           end
@@ -84,8 +82,8 @@ module JacintheReports
       signals :back, :accept
 
       QUIT_MSG = [
-          'La modification que vous avez faite',
-          'n\'a pas été acceptée'
+        'La modification que vous avez faite',
+        'n\'a pas été acceptée'
       ]
 
       def initialize(table)

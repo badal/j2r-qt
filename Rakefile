@@ -33,7 +33,7 @@ end
 
 desc 'show not documented'
 task :yard_not_documented do
-  system 'yard stat --list-undoc'
+  system 'yard stats --list-undoc'
 end
 
 Rake::TestTask.new do |t|

@@ -157,7 +157,7 @@ module JacintheReports
         size = @selector.build_tiers_list(values)
         if size == -1
           append_html('<b>Sélection vide.</b>')
-         else
+        else
           msg = (size ? "Liste créée, #{size} tiers" : 'Pas de liste créée')
           init_html("<hr><b>#{msg}</b>")
           selection_built

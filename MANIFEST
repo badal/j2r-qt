@@ -3,10 +3,7 @@ Gemfile
 Gemfile.lock
 HISTORY.md
 j2r-qt.gemspec
-lib/.rubocop.yml
 lib/j2r/qt/auditor_qt.rb
-lib/j2r/qt/coverage/.last_run.json
-lib/j2r/qt/coverage/.resultset.json.lock
 lib/j2r/qt/elements/auditor_elements.rb
 lib/j2r/qt/elements/auditor_main.rb
 lib/j2r/qt/elements/extensions.rb
