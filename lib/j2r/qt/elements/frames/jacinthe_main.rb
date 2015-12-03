@@ -13,7 +13,7 @@ module JacintheReports
       # copyright
       COPYRIGHT = "\u00A9 Michel Demazure & Kenji Lefevre"
 
-      # help directory
+      # help file
       HELP_FILE = File.expand_path('help/jacdoc.html', JacintheReports::DATA)
 
       include Signals

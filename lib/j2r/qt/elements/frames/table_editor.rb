@@ -20,21 +20,10 @@ module JacintheReports
         super(parent)
         @table = table
         @state = :saved
-        rows = table.size - 1
-        cols = table.first.size
-        set_row_count(rows)
-        set_column_count(cols)
-        set_headers
+        set_row_count(table.size - 1)
+        set_column_count(table.first.size)
         fill_with(table)
-        set_sizes
-      end
-
-      def set_headers
-        header_view = Qt::HeaderView.new(Qt::Horizontal)
-        header_view.setClickable(true)
-        setHorizontalHeader(header_view)
-        connect(header_view, SIGNAL('sectionDoubleClicked(int)'),
-                self, SLOT('sort_column(int)'))
+        set_headers
       end
 
       def fill_with(table)
@@ -47,15 +36,15 @@ module JacintheReports
         end
       end
 
-      def set_sizes
-        w = column_count.times.reduce(50) do |acc, i|
-          acc + columnWidth(i)
-        end
-        h = row_count.times.reduce(0) do |acc, i|
-          acc + rowHeight(i)
-        end
+      def set_headers
+        header_view = Qt::HeaderView.new(Qt::Horizontal)
+        header_view.setClickable(true)
+        setHorizontalHeader(header_view)
+        connect(header_view, SIGNAL('sectionDoubleClicked(int)'),
+                self, SLOT('sort_column(int)'))
+        header_view.set_resize_mode(Qt::HeaderView::ResizeToContents)
+        w = header_view.length
         set_minimum_width(w < MAX_SIZE ? w : MAX_SIZE)
-        set_minimum_height(h < MAX_SIZE ? h : MAX_SIZE)
       end
 
       def purge
@@ -82,28 +71,24 @@ module JacintheReports
       signals :back, :accept
 
       QUIT_MSG = [
-        'La modification que vous avez faite',
-        'n\'a pas été acceptée'
+          'La modification que vous avez faite',
+          'n\'a pas été acceptée'
       ]
 
       def initialize(table)
         super()
         self.window_title = 'Nettoyeur de table'
-
         @table = table
-
         layout = Qt::VBoxLayout.new(self)
         horiz = Qt::HBoxLayout.new
         layout.add_layout(horiz)
-        purge_button = Qt::PushButton.new('Nettoyer', self)
+        purge_button = Qt::PushButton.new('Effacer les ligne sélectionnées', self)
         horiz.add_widget(purge_button)
-
         save_button = Qt::PushButton.new('Accepter le nettoyage et fermer', self)
         horiz.add_widget(save_button)
-
+        horiz.add_stretch
         @tbl = JTable.new(table, self)
         layout.add_widget(@tbl)
-
         connect(purge_button, SIGNAL_CLICKED, @tbl, SLOT(:purge))
         connect(save_button, SIGNAL_CLICKED) do
           @tbl.state = :saved
