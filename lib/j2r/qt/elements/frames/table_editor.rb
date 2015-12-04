@@ -10,11 +10,11 @@ module JacintheReports
   module GuiQt
     # ad-hoc editor for the selector tool
     class JTable < Qt::TableWidget
-      MAX_SIZE = 800
 
       slots :purge, 'sort_column(int)', :save
 
       attr_accessor :state
+      attr_reader :estimated
 
       def initialize(table, parent)
         super(parent)
@@ -37,14 +37,13 @@ module JacintheReports
       end
 
       def set_headers
-        header_view = Qt::HeaderView.new(Qt::Horizontal)
-        header_view.setClickable(true)
-        setHorizontalHeader(header_view)
-        connect(header_view, SIGNAL('sectionDoubleClicked(int)'),
+        horizontal_header = Qt::HeaderView.new(Qt::Horizontal)
+        horizontal_header.setClickable(true)
+        setHorizontalHeader(horizontal_header)
+        connect(horizontal_header, SIGNAL('sectionDoubleClicked(int)'),
                 self, SLOT('sort_column(int)'))
-        header_view.set_resize_mode(Qt::HeaderView::ResizeToContents)
-        w = header_view.length
-        set_minimum_width(w < MAX_SIZE ? w : MAX_SIZE)
+        horizontal_header.set_resize_mode(Qt::HeaderView::ResizeToContents)
+        @estimated = horizontal_header.length + 5 * column_count
       end
 
       def purge
@@ -68,6 +67,8 @@ module JacintheReports
     class TableEditor < Qt::Widget
       include Signals
 
+      MAX_WIDTH = 1200
+
       signals :back, :accept
 
       QUIT_MSG = [
@@ -78,8 +79,19 @@ module JacintheReports
       def initialize(table)
         super()
         self.window_title = 'Nettoyeur de table'
-        @table = table
         layout = Qt::VBoxLayout.new(self)
+        purge_button, save_button = add_buttons(layout)
+        @tbl = JTable.new(table, self)
+        layout.add_widget(@tbl)
+        fix_size
+        connect(purge_button, SIGNAL_CLICKED, @tbl, SLOT(:purge))
+        connect(save_button, SIGNAL_CLICKED) do
+          @tbl.state = :saved
+          emit(accept)
+        end
+      end
+
+      def add_buttons(layout)
         horiz = Qt::HBoxLayout.new
         layout.add_layout(horiz)
         purge_button = Qt::PushButton.new('Effacer les ligne sélectionnées', self)
@@ -87,13 +99,14 @@ module JacintheReports
         save_button = Qt::PushButton.new('Accepter le nettoyage et fermer', self)
         horiz.add_widget(save_button)
         horiz.add_stretch
-        @tbl = JTable.new(table, self)
-        layout.add_widget(@tbl)
-        connect(purge_button, SIGNAL_CLICKED, @tbl, SLOT(:purge))
-        connect(save_button, SIGNAL_CLICKED) do
-          @tbl.state = :saved
-          emit(accept)
-        end
+        return purge_button, save_button
+      end
+
+      def fix_size
+        tbl_estimated = @tbl.estimated
+        minimal = tbl_estimated < MAX_WIDTH ? tbl_estimated : MAX_WIDTH
+        set_minimum_width(minimal)
+        resize(@tbl.height, minimal)
       end
 
       # WARNING needs camelCase form !!!
