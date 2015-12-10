@@ -213,13 +213,13 @@ module JacintheReports
       end
 
       def selected_changed
+        @selected = @editor.table
         size = @selected.size - 1
         msg = "Liste modifiée, #{size} tiers"
         init_html("<hr><b>#{msg}</b>")
         @selector.tiers_list = @selected.map do |line|
           ([line[0].to_i] + line[1..-1]).join("\t")
         end
-        @selector.tiers_list = @selected
         @editor.close
         ask_route
       end

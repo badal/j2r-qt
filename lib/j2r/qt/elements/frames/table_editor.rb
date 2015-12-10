@@ -13,7 +13,7 @@ module JacintheReports
 
       slots :purge, 'sort_column(int)', :save
 
-      attr_accessor :state
+      attr_accessor :state, :table
       attr_reader :estimated
 
       def initialize(table, parent)
@@ -27,8 +27,8 @@ module JacintheReports
       end
 
       def fill_with(table)
-        labels = table.first
-        setHorizontalHeaderLabels(labels)
+        @labels = table.first
+        setHorizontalHeaderLabels(@labels)
         table.drop(1).each_with_index do |line, row|
           line.each_with_index do |item, col|
             set_item(row, col, Qt::TableWidgetItem.new(item))
@@ -59,8 +59,19 @@ module JacintheReports
         @state = :changed
       end
 
+      def save
+        contents = (0...row_count).to_a.map do |row|
+          (0...column_count).to_a.map do |i|
+            item(row, i).text.force_encoding('utf-8')
+          end
+        end
+        @table = [@labels] + contents
+        @state = :saved
+      end
+
       def sort_column(int)
         sortByColumn(int, Qt::AscendingOrder)
+        @state = :changed
       end
     end
 
@@ -76,8 +87,10 @@ module JacintheReports
           'n\'a pas été acceptée'
       ]
 
+      attr_reader :table
       def initialize(table)
         super()
+        @table = table
         self.window_title = 'Nettoyeur de table'
         layout = Qt::VBoxLayout.new(self)
         purge_button, save_button = add_buttons(layout)
@@ -86,7 +99,8 @@ module JacintheReports
         fix_size
         connect(purge_button, SIGNAL_CLICKED, @tbl, SLOT(:purge))
         connect(save_button, SIGNAL_CLICKED) do
-          @tbl.state = :saved
+          @tbl.save
+          @table = @tbl.table
           emit(accept)
         end
       end
