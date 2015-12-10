@@ -219,6 +219,7 @@ module JacintheReports
         @selector.tiers_list = @selected.map do |line|
           ([line[0].to_i] + line[1..-1]).join("\t")
         end
+        @selector.tiers_list = @selected
         @editor.close
         ask_route
       end
