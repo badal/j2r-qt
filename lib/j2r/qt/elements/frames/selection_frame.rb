@@ -10,7 +10,7 @@ module JacintheReports
   module GuiQt
     # selection panel
     class SelectionFrame < PrettyFrame
-      slots :build_list, :show_list, :save_list, :execute
+      slots :build_list, :edit_list, :save_list, :execute
       signals :source_changed
 
       attr_accessor :selector
@@ -46,7 +46,7 @@ module JacintheReports
         connect_button(@build_button, :build_list)
         @show_button = Qt::PushButton.new('Voir la sélection')
         @layout.add_widget(@show_button)
-        connect_button(@show_button, :show_list)
+        connect_button(@show_button, :edit_list)
         @save_button = Qt::PushButton.new('Enregistrer')
         @layout.add_widget(@save_button)
         connect_button(@save_button, :save_list)
@@ -165,9 +165,7 @@ module JacintheReports
       end
 
       def selection_built
-        @selected = @selector.tiers_list.map do |line|
-          line.chomp.split("\t")
-        end
+        @table = @selector.table
         selection_done
         emit(source_changed)
         ask_route
@@ -200,47 +198,43 @@ module JacintheReports
         show_html(@html)
       end
 
-      def show_list
-        @initial = @selected.dup
-        @editor = TableEditor.new(@selected)
+      def edit_list
+        @saved_table = @table.dup
+        @editor = TableEditor.new(@saved_table)
         connect(@editor, SIGNAL(:back)) { restore_selected }
         connect(@editor, SIGNAL(:accept)) { selected_changed }
         @editor.show
       end
 
       def restore_selected
-        @selected = @initial
+        @table = @saved_table
       end
 
       def selected_changed
-        @selected = @editor.table
-        size = @selected.size - 1
+        @table = @editor.table
+        size = @table.row_count
         msg = "Liste modifiée, #{size} tiers"
         init_html("<hr><b>#{msg}</b>")
-        @selector.tiers_list = @selected.map do |line|
-          ([line[0].to_i] + line[1..-1]).join("\t")
-        end
         @editor.close
         ask_route
-      end
-
-      def output_content
-        @selected.map do |line|
-          line.join(CSV_SEPARATOR)
-        end.join("\n")
       end
 
       def save_list
         name = 'selection-' + Reports::CommonFormatters.time_stamp + '.csv'
         filename = File.join(User.lists, name)
         path = Dialog.ask_save_file(self, filename)
-        message = path ? J2R.to_csv_file(path, output_content) : 'Annulé'
+        content = @table.output_content(CSV_SEPARATOR)
+        message = path ? J2R.to_csv_file(path, content) : 'Annulé'
         console_message message
       end
 
       def execute
-        ret = @selector.execute(values)
+        ret = @selector.execute(values, @table.tiers_list)
         append_html("<b>#{ret}</b>")
+      end
+
+      def tiers_list
+        @table.tiers_list
       end
     end
   end

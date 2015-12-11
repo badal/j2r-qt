@@ -20,16 +20,16 @@ module JacintheReports
         super(parent)
         @table = table
         @state = :saved
-        set_row_count(table.size - 1)
-        set_column_count(table.first.size)
+        set_row_count(table.row_count)
+        set_column_count(table.column_count)
         fill_with(table)
         set_headers
       end
 
       def fill_with(table)
-        @labels = table.first
+        @labels = table.labels
         setHorizontalHeaderLabels(@labels)
-        table.drop(1).each_with_index do |line, row|
+        table.rows.each_with_index do |line, row|
           line.each_with_index do |item, col|
             set_item(row, col, Qt::TableWidgetItem.new(item))
           end
@@ -49,28 +49,26 @@ module JacintheReports
       def purge
         selection_model = selectionModel
         list = selection_model.selected_rows.map(&:row)
-        list.reverse_each do |row|
-          deleted_line = (0...column_count).to_a.map do |i|
-            item(row, i).text.force_encoding('utf-8')
-          end
-          @table.reject! { |line| line == deleted_line }
-          remove_row(row)
-        end
-        @state = :changed
-      end
-
-      def save
-        contents = (0...row_count).to_a.map do |row|
-          (0...column_count).to_a.map do |i|
-            item(row, i).text.force_encoding('utf-8')
-          end
-        end
-        @table = [@labels] + contents
-        @state = :saved
+        list.reverse_each { |row| remove_row(row) }
+        fix_table
       end
 
       def sort_column(int)
         sortByColumn(int, Qt::AscendingOrder)
+        fix_table
+      end
+
+      def saved
+        @state = :saved
+      end
+
+      def fix_table
+        rows = (0...row_count).to_a.map do |row|
+          (0...column_count).to_a.map do |i|
+            item(row, i).text.force_encoding('utf-8')
+          end
+        end
+        @table = @table.fix_rows(rows)
         @state = :changed
       end
     end
@@ -99,7 +97,7 @@ module JacintheReports
         fix_size
         connect(purge_button, SIGNAL_CLICKED, @tbl, SLOT(:purge))
         connect(save_button, SIGNAL_CLICKED) do
-          @tbl.save
+          @tbl.saved
           @table = @tbl.table
           emit(accept)
         end
