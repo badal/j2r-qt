@@ -10,7 +10,7 @@ module JacintheReports
   module GuiQt
     # selection panel
     class SelectionFrame < PrettyFrame
-      slots :build_list, :edit_list, :save_list, :execute
+      slots :build_selection, :edit_selection, :save_selection, :execute
       signals :source_changed
 
       attr_accessor :selector
@@ -43,13 +43,13 @@ module JacintheReports
       def build_center
         @build_button = Qt::PushButton.new('Créer la sélection')
         @layout.add_widget(@build_button)
-        connect_button(@build_button, :build_list)
-        @show_button = Qt::PushButton.new('Voir la sélection')
+        connect_button(@build_button, :build_selection)
+        @show_button = Qt::PushButton.new('Voir/éditer la sélection')
         @layout.add_widget(@show_button)
-        connect_button(@show_button, :edit_list)
-        @save_button = Qt::PushButton.new('Enregistrer')
+        connect_button(@show_button, :edit_selection)
+        @save_button = Qt::PushButton.new('Enregistrer la sélection')
         @layout.add_widget(@save_button)
-        connect_button(@save_button, :save_list)
+        connect_button(@save_button, :save_selection)
       end
 
       def build_bottom
@@ -123,12 +123,7 @@ module JacintheReports
 
       def parameter_fixed
         indx = @parameter.current_index
-        if indx <= 0
-          ask_parameter
-          return
-        else
-          ask_build
-        end
+        (indx <= 0) ? ask_parameter : ask_build
       end
 
       def choice_text
@@ -147,28 +142,30 @@ module JacintheReports
       end
 
       def ask_build
-        append_html(@selector.creation_message(values))
         @build_button.enabled = true
         selection_not_done
         @execute_button.enabled = false
+        append_html(@selector.creation_message(values))
       end
 
-      def build_list
-        size = @selector.build_tiers_list(values)
-        if size == -1
+      def build_selection
+        @selector.build_selection(values)
+        @table = @selector.table
+        size = @table.row_count
+        if size == 0
           append_html('<b>Sélection vide.</b>')
         else
-          msg = (size ? "Liste créée, #{size} tiers" : 'Pas de liste créée')
-          init_html("<hr><b>#{msg}</b>")
-          selection_built
+          init_html("<hr><b>Sélection créée, #{size} tiers</b>")
         end
+        new_selection(size)
       end
 
-      def selection_built
-        @table = @selector.table
-        selection_done
-        emit(source_changed)
-        ask_route
+      def selected_changed
+        @table = @editor.table
+        @editor.close
+        size = @table.row_count
+        init_html("<hr><b>Sélection modifiée, #{size} tiers</b>")
+        new_selection(size)
       end
 
       def ask_route
@@ -198,7 +195,7 @@ module JacintheReports
         show_html(@html)
       end
 
-      def edit_list
+      def edit_selection
         @saved_table = @table.dup
         @editor = TableEditor.new(@saved_table)
         connect(@editor, SIGNAL(:back)) { restore_selected }
@@ -210,16 +207,17 @@ module JacintheReports
         @table = @saved_table
       end
 
-      def selected_changed
-        @table = @editor.table
-        size = @table.row_count
-        msg = "Liste modifiée, #{size} tiers"
-        init_html("<hr><b>#{msg}</b>")
-        @editor.close
-        ask_route
+      def new_selection(size)
+        if size == 0
+          selection_not_done
+        else
+          selection_done
+          emit(source_changed)
+          ask_route
+        end
       end
 
-      def save_list
+      def save_selection
         name = 'selection-' + Reports::CommonFormatters.time_stamp + '.csv'
         filename = File.join(User.lists, name)
         path = Dialog.ask_save_file(self, filename)

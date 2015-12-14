@@ -10,7 +10,6 @@ module JacintheReports
   module GuiQt
     # ad-hoc editor for the selector tool
     class JTable < Qt::TableWidget
-
       slots :purge, 'sort_column(int)', :save
 
       attr_accessor :state, :table
@@ -81,8 +80,8 @@ module JacintheReports
       signals :back, :accept
 
       QUIT_MSG = [
-          'La modification que vous avez faite',
-          'n\'a pas été acceptée'
+        'La modification que vous avez faite',
+        'n\'a pas été acceptée'
       ]
 
       attr_reader :table
@@ -111,7 +110,7 @@ module JacintheReports
         save_button = Qt::PushButton.new('Accepter le nettoyage et fermer', self)
         horiz.add_widget(save_button)
         horiz.add_stretch
-        return purge_button, save_button
+        [purge_button, save_button]
       end
 
       def fix_size

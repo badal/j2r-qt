@@ -52,7 +52,7 @@ module JacintheReports
       end
 
       def source_changed
-        @mailing_frame.source = @selection_frame.selector
+        @mailing_frame.source = @selection_frame
       end
 
       # send the message to the console (overrides)
