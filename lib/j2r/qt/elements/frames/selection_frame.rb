@@ -81,6 +81,7 @@ module JacintheReports
           disable_all
         else
           @selector = @all_selectors[indx - 1]
+          J2R.logger.info("Loading selector : #{@selector.name}")
           init_html(@selector.description.to_s + '<hr>')
           show_years
           show_parameters

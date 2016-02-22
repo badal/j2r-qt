@@ -25,10 +25,6 @@ module JacintheReports
         super()
         layout = Qt::VBoxLayout.new(self)
 
-        # @head_label = Qt::Label.new
-        # layout.add_widget(@head_label)
-        # @show_zone = Qt::TextEdit.new(Qt::Frame.new)
-        # layout.add_widget(@show_zone)
         horizontal = Qt::HBoxLayout.new
         layout.addLayout(horizontal)
         @selection_frame = SelectionFrame.new
