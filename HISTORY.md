@@ -1,8 +1,14 @@
-##[v3.3] 
-* added automatic filtering by selected columns (Claire's request)
+## [v3.4.3.2]
+* restructured common frames requires
+
+## [v3.4]
+* added selector to j2r/qt
+
+## [v3.3]
+* added automatic filtering in reporter by selected columns (Claire's request)
 
 ##[v3.2.0]
-* protection added against saving/viewing report when not re-processed 
+* protection added against saving/viewing report when not re-processed
 
 ##[v3.1.0]
 * restructured directories
