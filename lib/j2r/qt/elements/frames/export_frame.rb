@@ -31,6 +31,7 @@ module JacintheReports
         horizontal.add_widget(@cross_frame)
         @mailing_frame = MailingFrame.new(@parametrizer)
         @mailing_frame.extend(Enabling)
+        @mailing_frame.connect_enabling(@parametrizer)
         horizontal.add_widget(@mailing_frame)
         @layout.addStretch
       end
