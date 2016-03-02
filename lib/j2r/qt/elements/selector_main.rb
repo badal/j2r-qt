@@ -7,7 +7,11 @@
 # (c) Michel Demazure <michel@demazure.com>
 
 require 'Qt'
-require_relative 'selector_elements.rb'
+
+require_relative 'common_elements.rb'
+require_relative 'frames/selection_frame.rb'
+require_relative 'frames/table_editor.rb'
+require_relative 'frames/selector_central_widget.rb'
 
 module JacintheReports
   module GuiQt

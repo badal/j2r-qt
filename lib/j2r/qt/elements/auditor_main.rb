@@ -7,7 +7,10 @@
 # (c) Michel Demazure <michel@demazure.com>
 
 require 'Qt'
-require_relative 'auditor_elements.rb'
+
+require_relative 'common_elements.rb'
+require_relative 'frames/tiers_audit_frame.rb'
+require_relative 'frames/auditor_central_widget.rb'
 
 module JacintheReports
   module GuiQt
