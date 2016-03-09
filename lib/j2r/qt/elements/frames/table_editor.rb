@@ -11,6 +11,7 @@ module JacintheReports
     # ad-hoc editor for the selector tool
     class JTable < Qt::TableWidget
       slots :purge, 'sort_column(int)', :save
+     # slots 'selected(int, int)'
 
       attr_accessor :state, :table
       attr_reader :estimated
@@ -23,16 +24,31 @@ module JacintheReports
         set_column_count(table.column_count)
         fill_with(table)
         set_headers
+      #  make_connection
       end
+
+      # def make_connection
+      #   connect(self, SIGNAL('cellClicked(int, int)'), self, SLOT('selected(int, int)'))
+      # end
+      #
+      # def selected(row, col)
+      #   puts "row: #{row}, col: #{col}, val: #{@table.rows[row][col]}, label: #{@labels[col]}"
+      # end
 
       def fill_with(table)
         @labels = table.labels
         setHorizontalHeaderLabels(@labels)
         table.rows.each_with_index do |line, row|
-          line.each_with_index do |item, col|
-            set_item(row, col, Qt::TableWidgetItem.new(item))
+          line.each_with_index do |content, col|
+            set_item(row, col, non_editable_item(content))
           end
         end
+      end
+
+      def non_editable_item(content)
+        item = Qt::TableWidgetItem.new(content)
+        item.set_flags(item.flags & ~Qt::ItemIsEditable)
+        item
       end
 
       def set_headers
