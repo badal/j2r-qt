@@ -1,3 +1,6 @@
+## [v3.4.3.4]
+* added searchable mailing list
+
 ## [v3.4.3.2]
 * restructured common frames requires
 

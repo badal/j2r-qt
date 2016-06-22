@@ -27,6 +27,7 @@ module JacintheReports
 
       MAILING_PROCESSORS = { 'Adresses postales' => :postal_adresses,
                              'Adresses postales (AFNOR)' => :afnor_adresses,
+                             'Adresses détaillées' => :searchable_adresses,
                              'Adresses mail' => :email_adresses,
                              'Adresses sans mail' => :no_email_adresses,
                              'Liste non filtrée' => :simple_list }
