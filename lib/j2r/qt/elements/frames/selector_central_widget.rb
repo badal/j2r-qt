@@ -8,7 +8,7 @@
 
 module JacintheReports
   module GuiQt
-    # central widget for auditer
+    # central widget for selector
     class SelectorCentralWidget < Qt::Widget
       include Signals
 
