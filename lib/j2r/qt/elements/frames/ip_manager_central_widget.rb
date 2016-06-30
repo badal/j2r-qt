@@ -23,13 +23,8 @@ module JacintheReports
       def initialize
         super()
         @layout = Qt::VBoxLayout.new(self)
-        build_query_line
-        build_edit_choice_line
-        #  build_edit_area
-        build_report_area
-        @layout.add_stretch
-
-        init_table
+        build_layout
+        load_ip_table
       end
 
       # @return [[Integer] * 4] geometry of mother window
@@ -55,16 +50,8 @@ module JacintheReports
       def build_layout
         build_query_line
         build_edit_choice_line
-        #  build_edit_area
         build_report_area
         @layout.add_stretch
-
-        init_table
-      end
-
-      def init_table
-        load_ip_table
-        report("#{@table.number} plages chargées, pour #{@table.size} tiers")
       end
 
       # build the corresponding part
@@ -74,7 +61,7 @@ module JacintheReports
         box.add_widget(Qt::Label.new('Plage à chercher : '))
         @query = Qt::LineEdit.new('134.157.134')
         box.add_widget(@query)
-        connect(@query, SIGNAL_EDITING_FINISHED) { ask_find(@query.text) }
+        connect(@query, SIGNAL(:returnPressed)) { ask_find(@query.text) }
       end
 
       def build_edit_choice_line
@@ -98,12 +85,15 @@ module JacintheReports
 
       def load_ip_table
         @table = JacintheManagement::IP::IPTable.load
+        report @table.report
+        @table.invalid_report.each { |line| error line }
       end
 
       def ask_find(str)
-        if JacintheManagement::Core::Electronic::IPRange.new(str).valid?
+        if JacintheManagement::IP::IPRange.new(str).valid?
           do_search(str)
         else
+          report '----'
           error("plage #{str} non valide")
         end
       end
@@ -120,8 +110,8 @@ module JacintheReports
         @edit_choice.set_size_adjust_policy(0)
       end
 
-      def start_edit
-        @editor = IPEditor.new(@ip_list)
+      def start_edit(content = @ip_list)
+        @editor = IPEditor.new(content, self)
         connect(@editor, SIGNAL(:back)) { restore_selected }
         connect(@editor, SIGNAL(:accept)) { selected_changed }
         @editor.show
@@ -131,11 +121,16 @@ module JacintheReports
       end
 
       def selected_changed
-        new_table = @editor.text
+        new_table = JacintheManagement::IP::IPRangeList.load_from_string(@editor.text)
+        toto = new_table.check
         @editor.close
-        p new_table
-        p @ip_list.tiers_id
-        ##########################
+        if toto
+          error "Plage incorrecte !"
+          toto.tiers_id = @ip_list.tiers_id
+          start_edit(toto)
+        else
+          new_table.save(@ip_list.tiers_id)
+        end
       end
 
       def presentation(result)

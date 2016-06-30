@@ -12,18 +12,12 @@ module JacintheReports
       slots :save
       attr_accessor :state
 
-      def initialize(ip_table, parent)
+      def initialize(ip_list, parent)
         super(parent)
         resize(400,600)
-        @ip_table = ip_table
+        @ip_table = ip_list
         @state = :saved
-        # self.window_title = "Editeur de plages IP"
-        # resize(350, 500)
-        # layout = Qt::VBoxLayout.new(self)
-        # layout.add_widget(Qt::Label.new("Table du tiers")) #" #{selected.tiers_id}"))
-        # @edit = Qt::TextEdit.new
-        # layout.add_widget(@edit)
-        fill_with(ip_table.before, ip_table.line, ip_table.after)
+        fill_with(ip_list.before, ip_list.line, ip_list.after)
         connect(self, SIGNAL(:textChanged)) { @state = :changed }
       end
 
@@ -66,14 +60,12 @@ module JacintheReports
       ]
 
       attr_reader :text
-
-      def initialize(ip_list)
+      def initialize(ip_list, parent)
         super()
+        set_geometry(parent.parent.x + 200, parent.parent.y,400,600)
+     #   pos(Qt::Point.new(100,100))
         resize(400,600)
-        @ip_list = ip_list
         self.window_title = 'Nettoyeur de liste de plages'
-
-
         layout = Qt::VBoxLayout.new(self)
         horiz = Qt::HBoxLayout.new
         layout.add_layout(horiz)
@@ -81,23 +73,19 @@ module JacintheReports
         save_button = Qt::PushButton.new('Accepter les modifications et fermer', self)
         horiz.add_widget(save_button)
         horiz.add_stretch
-        @edit = SpecialEditor.new(ip_list, self)
-        layout.add_widget(@edit)
+        @editor = SpecialEditor.new(ip_list, self)
+        layout.add_widget(@editor)
         connect(save_button, SIGNAL_CLICKED) do
-          @edit.saved
-          @text = @edit.to_plain_text
+          @editor.saved
+          @text = @editor.to_plain_text
           emit(accept)
         end
-      end
-
-      def add_button(layout)
-
       end
 
       # WARNING needs camelCase form !!!
       # noinspection RubyInstanceMethodNamingConvention
       def closeEvent(event) # rubocop:disable MethodName
-        case @edit.state
+        case @editor.state
         when :saved
           return
         when :changed
