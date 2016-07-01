@@ -11,7 +11,7 @@ module JacintheReports
     # ad-hoc editor for the selector tool
     class JTable < Qt::TableWidget
       slots :purge, 'sort_column(int)', :save
-     # slots 'selected(int, int)'
+      # slots 'selected(int, int)'
 
       attr_accessor :state, :table
       attr_reader :estimated
@@ -24,7 +24,7 @@ module JacintheReports
         set_column_count(table.column_count)
         fill_with(table)
         set_headers
-      #  make_connection
+        #  make_connection
       end
 
       # def make_connection

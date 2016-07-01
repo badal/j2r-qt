@@ -8,39 +8,38 @@
 module JacintheReports
   module GuiQt
     class SpecialEditor < Qt::TextEdit
-
-      slots :save
+      # slots :save
       attr_accessor :state
 
       def initialize(ip_list, parent)
         super(parent)
-        resize(400,600)
+        resize(400, 600)
         @ip_table = ip_list
         @state = :saved
+        document = Qt::TextDocument.new
+        setDocument(document)
+        @cursor = Qt::TextCursor.new(document)
         fill_with(ip_list.before, ip_list.line, ip_list.after)
         connect(self, SIGNAL(:textChanged)) { @state = :changed }
       end
 
       def fill_with(before, line, after)
-        document = Qt::TextDocument.new
-        setDocument(document)
-        cursor = Qt::TextCursor.new(document)
         insert_plain_text(before.join("\n"))
-        cur_beg = cursor.position
+        cur_beg = @cursor.position
         insert_plain_text("\n#{line}\n")
-        cur_end = cursor.position
+        cur_end = @cursor.position
         insert_plain_text(after.join("\n"))
 
-        cursor.set_position(cur_beg, Qt::TextCursor::MoveAnchor)
-        cursor.set_position(cur_end, Qt::TextCursor::KeepAnchor)
+        @cursor.set_position(cur_beg, Qt::TextCursor::MoveAnchor)
+        @cursor.set_position(cur_end, Qt::TextCursor::KeepAnchor)
         fmt = Qt::TextCharFormat.new
         color = '#0FF'
         brush = Qt::Brush.new(Qt::Color.new(color), Qt::SolidPattern)
         fmt.set_background(brush)
-        cursor.setCharFormat(fmt)
-        cursor.set_position(cur_end)
+        @cursor.setCharFormat(fmt)
+        @cursor.set_position(cur_end)
 
-        setTextCursor(cursor)
+        setTextCursor(@cursor)
         ensureCursorVisible
       end
 
@@ -55,16 +54,16 @@ module JacintheReports
       signals :back, :accept
 
       QUIT_MSG = [
-          'La modification que vous avez faite',
-          'n\'a pas été acceptée'
+        'La modification que vous avez faite',
+        'n\'a pas été acceptée'
       ]
 
       attr_reader :text
       def initialize(ip_list, parent)
         super()
-        set_geometry(parent.parent.x + 200, parent.parent.y,400,600)
-     #   pos(Qt::Point.new(100,100))
-        resize(400,600)
+        set_geometry(parent.parent.x + 200, parent.parent.y, 400, 600)
+        #   pos(Qt::Point.new(100,100))
+        resize(400, 600)
         self.window_title = 'Nettoyeur de liste de plages'
         layout = Qt::VBoxLayout.new(self)
         horiz = Qt::HBoxLayout.new
@@ -84,7 +83,7 @@ module JacintheReports
 
       # WARNING needs camelCase form !!!
       # noinspection RubyInstanceMethodNamingConvention
-      def closeEvent(event) # rubocop:disable MethodName
+      def closeEvent(event)
         case @editor.state
         when :saved
           return
@@ -97,7 +96,6 @@ module JacintheReports
           end
         end
       end
-
     end
   end
 end
