@@ -59,7 +59,7 @@ module JacintheReports
         box = Qt::HBoxLayout.new
         @layout.add_layout(box)
         box.add_widget(Qt::Label.new('Plage à chercher : '))
-        @query = Qt::LineEdit.new('134.157.134')
+        @query = Qt::LineEdit.new('')
         box.add_widget(@query)
         connect(@query, SIGNAL(:returnPressed)) { ask_find(@query.text) }
       end
@@ -162,7 +162,7 @@ module JacintheReports
       # show an error message
       # @param [String] message message to show
       def error(message)
-        @report.append('<font color=red><b>' 'ERREUR</b> : </color> ' + message)
+        @report.append('<font color=red><b>' 'ERREUR</b> : </font> ' + message)
       end
 
       # WARNING: overrides the common one, useless in this case
