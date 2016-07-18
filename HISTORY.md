@@ -1,3 +1,9 @@
+## [v3.4.4.2]
+* moved reference to Reports from jaccess in mailing_frame
+
+## [v3.4.4.1]
+* added ip_manager
+
 ## [v3.4.3.4]
 * added searchable mailing list
 

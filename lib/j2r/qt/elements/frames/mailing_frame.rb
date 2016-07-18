@@ -14,28 +14,28 @@ module JacintheReports
       J2R::UsageAdresse.each do |usg|
         USAGES[usg.id - 1] = usg.usage_adresse_nom
       end
-
+      
       ETATS = []
       J2R::EtatTiers.each do |etat|
         ETATS[etat.id - 1] = etat.etat_tiers_nom
       end
-
+      
       ZONES = ['Toutes zones']
       J2R::ZonePostePays.each do |zone|
         ZONES[zone.id] = zone.zone_poste_pays_nom
       end
-
+      
       MAILING_PROCESSORS = { 'Adresses postales' => :postal_adresses,
                              'Adresses postales (AFNOR)' => :afnor_adresses,
                              'Adresses détaillées' => :searchable_adresses,
                              'Adresses mail' => :email_adresses,
                              'Adresses sans mail' => :no_email_adresses,
                              'Liste non filtrée' => :simple_list }
-
+      
       MAILING_FORMATS = MAILING_PROCESSORS.keys
-
+      
       slots :build_output_list, :save_list, :show_list
-
+      
       attr_accessor :source
       # source must answer  source.tiers_list
       def initialize(source)
@@ -49,7 +49,7 @@ module JacintheReports
         @layout.addStretch
         enable_choices(false)
       end
-
+      
       def build_top
         @usage = selection_widget('Usage', USAGES)
         @state = selection_widget('Etat', ETATS)
@@ -58,7 +58,7 @@ module JacintheReports
         connect_button(button, :build_output_list)
         @layout.add_widget(button)
       end
-
+      
       def build_bottom
         @format = selection_widget('Format', MAILING_FORMATS)
         buttons = Qt::HBoxLayout.new
@@ -70,13 +70,13 @@ module JacintheReports
         connect_button(@save_list, :save_list)
         connect_button(@show_list, :show_list)
       end
-
+      
       def enable_choices(bool)
         [@save_list, @show_list, @format].each do |widget|
           widget.enabled = bool
         end
       end
-
+      
       # @param [Array] tiers_list list of tiers_id
       # @return [Array<J2R::VueAdresse>] list of vue_adresse records
       def address_list(tiers_list)
@@ -85,26 +85,27 @@ module JacintheReports
                    zone: ZONES.index(@zone.currentText) }
         Jaccess::MailingList.new(tiers_list, params)
       end
-
+      
       def build_output_list
         tiers_list = @source.tiers_list
         if tiers_list
           @mailing_list = address_list(tiers_list)
           console_message "Listes : #{tiers_list.size} tiers, #{@mailing_list.size} adresse(s)"
-          show_html(@mailing_list.show_table.sample_for_html(5))
+          table = Reports::Table.new(*@mailing_list.table_to_show)
+          show_html(table.sample_for_html(5))
           enable_choices(true)
         else
           console_message 'Pas de liste de tiers'
           enable_choices(false)
         end
       end
-
+      
       def output_from(mailing_list)
         pattern = @format.currentText
         processor = MAILING_PROCESSORS[pattern]
         mailing_list.send(processor).map { |line| line.join(J2R::CSV_SEPARATOR) }
       end
-
+      
       def if_content
         content = output_from(@mailing_list)
         if content && content.size != 0
@@ -116,7 +117,7 @@ module JacintheReports
           console_message 'Pas de liste de mailing'
         end
       end
-
+      
       def save_list
         if_content do |content|
           name = 'routage-' + Reports::CommonFormatters.time_stamp + '.csv'
@@ -126,7 +127,7 @@ module JacintheReports
           console_message message
         end
       end
-
+      
       def show_list
         if_content do |content|
           coding = J2R.system_csv_encoding
